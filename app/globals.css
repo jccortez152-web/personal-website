@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+/* Palette pivoted from cool charcoal+cyan (RoboCare console feel) to
+   warm stone + lime accent. Tailwind v4 turns each --color-* into a utility.
+   Token names kept as `ink-*` and `cyan-bright` to avoid a global rename;
+   only the hex values changed. */
+@theme {
+  --color-ink-950: #0c0a09;
+  --color-ink-900: #1c1917;
+  --color-ink-800: #292524;
+  --color-ink-700: #44403c;
+  --color-ink-600: #57534e;
+  --color-ink-500: #78716c;
+  --color-ink-400: #a8a29e;
+  --color-ink-300: #d6d3d1;
+  --color-ink-200: #e7e5e4;
+  --color-ink-100: #fafaf9;
+
+  --color-cyan-bright: #a3e635;
+  --color-cyan-dim: #65a30d;
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-fraunces);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Background lives on html so the fixed 3D canvas (z-index -10) can paint
+     between html's bg and body's content. */
+  background: var(--color-ink-950);
+}
+
+body {
+  background: transparent;
+  color: var(--color-ink-100);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-cyan-bright);
+  color: var(--color-ink-950);
+}
+
+/* Marquee + bob keyframes kept around in case they're reused. */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 70s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes float-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.animate-float-bob {
+  animation: float-bob 3.6s ease-in-out infinite;
+}
+
+@keyframes caret-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+.animate-caret {
+  animation: caret-blink 1s step-end infinite;
+}
+
+/* Slow drift for the hero mesh-gradient backdrop. */
+@keyframes mesh-drift {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(40px, -30px); }
+}
+.animate-mesh-drift {
+  animation: mesh-drift 18s ease-in-out infinite;
+}
+
+/* Scan-line sweep for the hero portrait. Wrapper is h-full so translateY
+   percentages cover the parent's height — the line traverses top → bottom.
+   Pure transform + opacity, no layout properties. */
+@keyframes scan-sweep {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+.animate-scan-sweep {
+  animation: scan-sweep 4.5s ease-in-out infinite;
+}
+
+/* Continuous gradient shimmer for the italic "Cortez." in the hero masthead.
+   Lime band sweeps left → right through the text every 6 seconds. */
+@keyframes name-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -100% 0; }
+}
+.animate-name-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-ink-100) 35%,
+    var(--color-cyan-bright) 50%,
+    var(--color-ink-100) 65%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: name-shimmer 6s linear infinite;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ink-950);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ink-800);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-700);
+}
