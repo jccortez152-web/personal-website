@@ -11,7 +11,15 @@ const fraunces = Fraunces({
   display: "swap",
 });
 
+// Resolves OG/Twitter image URLs absolutely. Vercel injects
+// VERCEL_PROJECT_PRODUCTION_URL on production deploys; falls back to
+// localhost during dev so social previews work in both environments.
+const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "http://localhost:3000";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Johannes Cortez — Robot Ops + AI Automations",
   description:
     "L1 RoboCare Specialist at Relay Robotics. Front-line diagnostics on a global robot fleet, building AI agents and internal tools on the side.",
