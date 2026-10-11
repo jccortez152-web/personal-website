@@ -1,19 +1,31 @@
-// Dynamic Open Graph card. File-based convention — Next.js auto-wires this
-// as the page's og:image (and twitter:image, since no twitter-image.tsx
-// overrides it). Edge runtime + ImageResponse from next/og.
-//
-// 1200×630 is the canonical OG size. Edge-cached after first render so
-// social platforms get a fast PNG.
+// Open Graph card, auto-wired as og:image and twitter:image. Fleet Console
+// theme: ink background, dot grid, Space Grotesk name, amber route accent.
+// Fonts are static WOFF files in ./og-fonts (next/font can't feed ImageResponse).
 
 import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 
-export const runtime = "edge";
 export const alt =
-  "Johannes Cortez — Robotics Engineer · solving live system failures.";
+  "Johannes Cortez — AI Automation Specialist · Robotics Fleet Ops";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+const ink = "#0E1A24";
+const fg = "#EAF0F3";
+const fg2 = "#B4C3CD";
+const muted = "#9FB2BF";
+const signal = "#F2A93B";
+const live = "#4FB286";
+
 export default async function OG() {
+  const dir = join(process.cwd(), "app", "og-fonts");
+  const [grotesk500, grotesk700, mono500] = await Promise.all([
+    readFile(join(dir, "space-grotesk-latin-500-normal.woff")),
+    readFile(join(dir, "space-grotesk-latin-700-normal.woff")),
+    readFile(join(dir, "jetbrains-mono-latin-500-normal.woff")),
+  ]);
+
   return new ImageResponse(
     (
       <div
@@ -22,14 +34,14 @@ export default async function OG() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          background: "#0c0a09",
+          background: ink,
           padding: "72px 80px",
-          color: "#fafaf9",
+          color: fg,
+          fontFamily: "Space Grotesk",
           position: "relative",
-          fontFamily: "system-ui, -apple-system, sans-serif",
         }}
       >
-        {/* Subtle grid pattern */}
+        {/* Dot grid */}
         <div
           style={{
             position: "absolute",
@@ -37,127 +49,124 @@ export default async function OG() {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)",
-            backgroundSize: "64px 64px",
             display: "flex",
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, rgba(234,240,243,0.08) 1px, transparent 1.5px)",
+            backgroundSize: "28px 28px",
           }}
         />
 
-        {/* Lime radial glow accent */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundImage:
-              "radial-gradient(ellipse 55% 70% at 78% 55%, rgba(163,230,53,0.18) 0%, rgba(163,230,53,0.04) 35%, rgba(163,230,53,0) 70%)",
-            display: "flex",
-          }}
-        />
-
-        {/* Top kicker */}
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            gap: "20px",
-            fontSize: "18px",
-            color: "#78716c",
-            letterSpacing: "5px",
+            fontFamily: "JetBrains Mono",
+            fontSize: 20,
+            letterSpacing: "0.15em",
             textTransform: "uppercase",
+            color: signal,
           }}
         >
+          § Portfolio · 2026
+        </div>
+
+        <div style={{ flex: 1, display: "flex" }} />
+
+        <div
+          style={{
+            display: "flex",
+            fontSize: 112,
+            fontWeight: 700,
+            letterSpacing: "-0.03em",
+            lineHeight: 1,
+          }}
+        >
+          Johannes Cortez
+        </div>
+        <div
+          style={{
+            display: "flex",
+            marginTop: 28,
+            fontSize: 40,
+            fontWeight: 500,
+            color: fg2,
+          }}
+        >
+          AI Automation Specialist · Robotics Fleet Ops
+        </div>
+
+        {/* Dotted amber route */}
+        <div style={{ display: "flex", alignItems: "center", marginTop: 48 }}>
           <div
             style={{
-              width: "48px",
-              height: "1px",
-              background: "#44403c",
+              width: 14,
+              height: 14,
+              borderRadius: 999,
+              border: `2px solid ${signal}`,
               display: "flex",
             }}
           />
-          <span>/ portfolio · 2026 · robotics + AI</span>
-        </div>
-
-        {/* Spacer pushes the name block down */}
-        <div style={{ flex: 1, display: "flex" }} />
-
-        {/* Name — masthead */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            fontSize: "168px",
-            fontWeight: 300,
-            lineHeight: 0.92,
-            letterSpacing: "-7px",
-          }}
-        >
-          <span>Johannes</span>
-          <span style={{ fontStyle: "italic", fontWeight: 400 }}>
-            Cortez.
-          </span>
-        </div>
-
-        {/* Tagline */}
-        <div
-          style={{
-            marginTop: "36px",
-            fontSize: "34px",
-            fontStyle: "italic",
-            color: "#d6d3d1",
-            display: "flex",
-            alignItems: "center",
-            gap: "14px",
-            letterSpacing: "-0.5px",
-          }}
-        >
-          <span>Robotics Engineer</span>
-          <span style={{ color: "#a3e635", fontStyle: "normal" }}>·</span>
-          <span>solving live system failures.</span>
-        </div>
-
-        {/* Spacer pushes the footer to the bottom */}
-        <div style={{ flex: 1, display: "flex" }} />
-
-        {/* Bottom row */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            fontSize: "18px",
-            color: "#a8a29e",
-            letterSpacing: "5px",
-            textTransform: "uppercase",
-            fontFamily: "ui-monospace, SFMono-Regular, monospace",
-          }}
-        >
+          <div style={{ display: "flex", gap: 8, marginLeft: 10, marginRight: 10 }}>
+            {Array.from({ length: 56 }, (_, i) => (
+              <div
+                key={i}
+                style={{
+                  width: 4,
+                  height: 4,
+                  borderRadius: 999,
+                  background: signal,
+                  display: "flex",
+                }}
+              />
+            ))}
+          </div>
           <div
             style={{
+              width: 16,
+              height: 16,
+              borderRadius: 999,
+              background: signal,
               display: "flex",
-              alignItems: "center",
-              gap: "14px",
             }}
-          >
+          />
+        </div>
+
+        <div style={{ flex: 1, display: "flex" }} />
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            fontFamily: "JetBrains Mono",
+            fontSize: 20,
+            letterSpacing: "0.15em",
+            textTransform: "uppercase",
+            color: muted,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <div
               style={{
-                width: "14px",
-                height: "14px",
-                borderRadius: "50%",
-                background: "#a3e635",
-                boxShadow: "0 0 24px rgba(163,230,53,0.65)",
+                width: 12,
+                height: 12,
+                borderRadius: 999,
+                background: live,
                 display: "flex",
               }}
             />
-            <span>open to work</span>
+            <span style={{ color: live }}>Open to work</span>
           </div>
-          <span style={{ color: "#d6d3d1" }}>github.com/jccortez152-web</span>
+          <span>github.com/jccortez152-web</span>
         </div>
       </div>
     ),
-    { ...size },
+    {
+      ...size,
+      fonts: [
+        { name: "Space Grotesk", data: grotesk500, weight: 500, style: "normal" },
+        { name: "Space Grotesk", data: grotesk700, weight: 700, style: "normal" },
+        { name: "JetBrains Mono", data: mono500, weight: 500, style: "normal" },
+      ],
+    },
   );
 }

@@ -1,46 +1,26 @@
-// Editorial farewell. Big italic display serif "Let's talk." with the
-// three contact channels as a clean inline list.
+// Contact — heading and intro on the left, the three channels as full-width
+// link rows on the right.
 
 import { ArrowUpRight } from "lucide-react";
 import { profile } from "@/lib/data";
+import SectionHeader from "./ui/SectionHeader";
 
 export default function Contact() {
   return (
-    <section
-      id="contact"
-      className="px-6 py-32 md:py-40 border-t border-ink-800/60"
-    >
-      <div className="max-w-7xl mx-auto">
-        <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-ink-500 flex items-center gap-3 mb-12">
-          <span>§ 07</span>
-          <span className="h-px w-8 bg-ink-700" />
-          <span>fin</span>
-        </div>
-
+    <section id="contact" className="px-4 md:px-8 py-24 md:py-32 border-t border-line">
+      <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-          <div className="lg:col-span-7">
-            <h2
-              className="font-display font-light tracking-tight leading-[0.95] text-ink-100"
-              style={{ fontSize: "clamp(48px, 9vw, 140px)" }}
-            >
-              Let's talk.
-              <br />
-              <span className="italic text-ink-400">
-                If the role's interesting,
-              </span>
-              <br />
-              <span className="italic text-cyan-bright">I'm interested.</span>
-            </h2>
-
-            <p className="mt-10 text-ink-400 max-w-xl text-lg leading-relaxed">
-              Open to robotics ops, AI / automation engineering, internal
-              tooling, or anywhere the three meet. {profile.location}, remote
-              friendly across timezones.
-            </p>
+          <div className="lg:col-span-6">
+            <SectionHeader
+              index="08"
+              label="Contact"
+              title="Let's talk."
+              sub="Open to AI automation, AI agent, and technical solutions roles. Remote-friendly across time zones."
+            />
           </div>
 
-          <div className="lg:col-span-5 lg:col-start-8 flex flex-col justify-end">
-            <ul className="space-y-1 border-t border-ink-800">
+          <div className="lg:col-span-6 flex flex-col justify-end">
+            <ul className="border-t border-line">
               <ContactRow
                 href={`mailto:${profile.email}`}
                 label="Email"
@@ -78,25 +58,25 @@ function ContactRow({
   external?: boolean;
 }) {
   return (
-    <li className="border-b border-ink-800">
+    <li className="border-b border-line">
       <a
         href={href}
         target={external ? "_blank" : undefined}
         rel={external ? "noopener noreferrer" : undefined}
-        className="group flex items-baseline justify-between gap-6 py-5 hover:px-2 transition-all"
+        className="group flex items-center justify-between gap-6 min-h-16 py-4"
       >
-        <span className="flex items-baseline gap-6">
-          <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-ink-500 w-16 shrink-0">
-            {label}
-          </span>
-          <span className="text-ink-100 group-hover:text-cyan-bright transition-colors font-display italic text-xl md:text-2xl break-all">
+        <span className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-6 min-w-0">
+          <span className="label-mono text-muted sm:w-20 shrink-0">{label}</span>
+          <span className="text-lg md:text-xl font-medium text-fg group-hover:text-signal transition-colors duration-150 break-all">
             {value}
           </span>
         </span>
         <ArrowUpRight
-          className="w-4 h-4 text-ink-500 group-hover:text-cyan-bright group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all shrink-0"
-          strokeWidth={1.5}
+          className="w-4 h-4 text-muted group-hover:text-signal transition-colors duration-150 shrink-0"
+          strokeWidth={1.75}
+          aria-hidden
         />
+        {external && <span className="sr-only">(opens in a new tab)</span>}
       </a>
     </li>
   );

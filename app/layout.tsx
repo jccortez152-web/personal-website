@@ -1,13 +1,21 @@
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
-import { Fraunces } from "next/font/google";
+import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import MotionProvider from "@/components/ui/MotionProvider";
 
-// Display serif for editorial moments (masthead H1, pull quotes, section titles).
-const fraunces = Fraunces({
+// Display + body.
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-fraunces",
+  weight: ["400", "500", "700"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
+// Labels, section numbers, tags, code, metadata.
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-jetbrains-mono",
   display: "swap",
 });
 
@@ -18,35 +26,36 @@ const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
   : "http://localhost:3000";
 
+const title = "Johannes Cortez — AI Automation Specialist";
+const description =
+  "AI Automation Specialist building AI agents and automations inside a live robotics operation. Claude, n8n, MCP, Next.js, Supabase.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Johannes Cortez — Robot Ops + AI Automations",
-  description:
-    "L1 RoboCare Specialist at Relay Robotics. Front-line diagnostics on a global robot fleet, building AI agents and internal tools on the side.",
+  title,
+  description,
   keywords: [
-    "Robotics Engineer",
-    "ROS",
-    "Linux Diagnostics",
-    "Robot Fleet",
-    "Relay Robotics",
-    "RoboCare",
     "AI Automation",
+    "AI Agents",
+    "Claude",
+    "n8n",
+    "MCP",
     "RAG",
-    "LLM Agents",
+    "Robotics Fleet Ops",
+    "Next.js",
+    "Supabase",
   ],
   authors: [{ name: "Johannes Christopher O. Cortez" }],
   openGraph: {
-    title: "Johannes Cortez — Robot Ops + AI Automations",
-    description:
-      "L1 RoboCare Specialist at Relay Robotics. Front-line diagnostics on a global robot fleet, building AI agents and internal tools on the side.",
+    title,
+    description,
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Johannes Cortez — Robot Ops + AI Automations",
-    description:
-      "L1 RoboCare Specialist at Relay Robotics. Front-line diagnostics on a global robot fleet, building AI agents and internal tools on the side.",
+    title,
+    description,
   },
   robots: { index: true, follow: true },
 };
@@ -59,9 +68,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${GeistSans.variable} ${GeistMono.variable} ${fraunces.variable}`}
+      className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <MotionProvider>{children}</MotionProvider>
+      </body>
     </html>
   );
 }

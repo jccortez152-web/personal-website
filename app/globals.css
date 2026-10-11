@@ -1,117 +1,130 @@
 @import "tailwindcss";
 
-/* Palette pivoted from cool charcoal+cyan (RoboCare console feel) to
-   warm stone + lime accent. Tailwind v4 turns each --color-* into a utility.
-   Token names kept as `ink-*` and `cyan-bright` to avoid a global rename;
-   only the hex values changed. */
+/* Fleet Console design tokens. Tailwind v4 turns each --color-* into a
+   utility (bg-ink, text-fg-2, border-line, text-signal, ...). Components use
+   these only — no hardcoded colors. */
 @theme {
-  --color-ink-950: #0c0a09;
-  --color-ink-900: #1c1917;
-  --color-ink-800: #292524;
-  --color-ink-700: #44403c;
-  --color-ink-600: #57534e;
-  --color-ink-500: #78716c;
-  --color-ink-400: #a8a29e;
-  --color-ink-300: #d6d3d1;
-  --color-ink-200: #e7e5e4;
-  --color-ink-100: #fafaf9;
+  --color-ink: #0e1a24;
+  --color-surface: #13222e;
+  --color-line: rgb(234 240 243 / 0.12);
+  --color-fg: #eaf0f3;
+  --color-fg-2: #b4c3cd;
+  --color-muted: #9fb2bf;
+  --color-signal: #f2a93b;
+  --color-live: #4fb286;
 
-  --color-cyan-bright: #a3e635;
-  --color-cyan-dim: #65a30d;
+  --radius-card: 10px;
 
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* Type scale */
+  --text-hero: clamp(2.5rem, 1.4rem + 4.6vw, 4.5rem);
+  --text-hero--line-height: 1.02;
+  --text-hero--letter-spacing: -0.03em;
+  --text-h2: clamp(2rem, 1.6rem + 1.4vw, 2.5rem);
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.02em;
+  --text-body: clamp(1.0625rem, 1rem + 0.25vw, 1.125rem);
+  --text-body--line-height: 1.6;
+  --text-label: 0.8125rem;
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.15em;
 }
 
 html {
   scroll-behavior: smooth;
-  /* Background lives on html so the fixed 3D canvas (z-index -10) can paint
-     between html's bg and body's content. */
-  background: var(--color-ink-950);
+  background: var(--color-ink);
 }
 
 body {
-  background: transparent;
-  color: var(--color-ink-100);
+  background: var(--color-ink);
+  color: var(--color-fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+/* Anchor jumps land below the sticky nav. */
+section[id] {
+  scroll-margin-top: 72px;
 }
 
 ::selection {
-  background: var(--color-cyan-bright);
-  color: var(--color-ink-950);
+  background: var(--color-signal);
+  color: var(--color-ink);
 }
 
-/* Marquee + bob keyframes kept around in case they're reused. */
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-.animate-marquee {
-  animation: marquee 70s linear infinite;
-}
-.animate-marquee:hover {
-  animation-play-state: paused;
+/* Visible amber focus ring on every interactive element. */
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
-@keyframes float-bob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
+/* Mono label: section numbers, metadata, tags. */
+@utility label-mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  letter-spacing: var(--text-label--letter-spacing);
+  text-transform: uppercase;
 }
-.animate-float-bob {
-  animation: float-bob 3.6s ease-in-out infinite;
+
+/* Dot grid — hero and section headers only, never behind body copy. */
+@utility dot-grid {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgb(234 240 243 / 0.08) 1px,
+    transparent 1.5px
+  );
+  background-size: 28px 28px;
+}
+
+/* Card hover: amber border at ~40% and a 2px lift. */
+@utility card-hover {
+  transition:
+    transform 150ms ease-out,
+    border-color 150ms ease-out;
+  &:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--color-signal) 40%, transparent);
+  }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@utility animate-rise {
+  animation: rise 280ms ease-out both;
 }
 
 @keyframes caret-blink {
   0%, 50% { opacity: 1; }
   51%, 100% { opacity: 0; }
 }
-.animate-caret {
+@utility animate-caret {
   animation: caret-blink 1s step-end infinite;
 }
 
-/* Slow drift for the hero mesh-gradient backdrop. */
-@keyframes mesh-drift {
-  0%, 100% { transform: translate(0, 0); }
-  50%      { transform: translate(40px, -30px); }
-}
-.animate-mesh-drift {
-  animation: mesh-drift 18s ease-in-out infinite;
-}
-
-/* Scan-line sweep for the hero portrait. Wrapper is h-full so translateY
-   percentages cover the parent's height — the line traverses top → bottom.
-   Pure transform + opacity, no layout properties. */
-@keyframes scan-sweep {
-  0%   { transform: translateY(-100%); opacity: 0; }
-  8%   { opacity: 1; }
-  92%  { opacity: 1; }
-  100% { transform: translateY(100%); opacity: 0; }
-}
-.animate-scan-sweep {
-  animation: scan-sweep 4.5s ease-in-out infinite;
-}
-
-/* Continuous gradient shimmer for the italic "Cortez." in the hero masthead.
-   Lime band sweeps left → right through the text every 6 seconds. */
-@keyframes name-shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -100% 0; }
-}
-.animate-name-shimmer {
-  background-image: linear-gradient(
-    100deg,
-    var(--color-ink-100) 35%,
-    var(--color-cyan-bright) 50%,
-    var(--color-ink-100) 65%
-  );
-  background-size: 200% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  animation: name-shimmer 6s linear infinite;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  ::before,
+  ::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .card-hover:hover {
+    transform: none;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 ::-webkit-scrollbar {
@@ -119,12 +132,9 @@ body {
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-ink-950);
+  background: var(--color-ink);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-ink-800);
-  border-radius: 6px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-ink-700);
+  background: var(--color-surface);
+  border-radius: 999px;
 }

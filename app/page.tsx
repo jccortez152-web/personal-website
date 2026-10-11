@@ -3,21 +3,26 @@ import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Skills from "@/components/Skills";
 import Experience from "@/components/Experience";
+import Agents from "@/components/Agents";
 import Projects from "@/components/Projects";
 import RoboChatDemo from "@/components/RoboChatDemo";
 import Certifications from "@/components/Certifications";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/ui/Reveal";
-import Background3D from "@/components/three/Background3D";
 
 export default function Home() {
   return (
     <>
-      <Background3D />
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-3 focus:rounded-card focus:bg-signal focus:text-ink focus:font-bold"
+      >
+        Skip to content
+      </a>
       <Navbar />
-      <main>
-        {/* Hero stays unwrapped — already visible on load with its own internal motion */}
+      <main id="main">
+        {/* Hero stays unwrapped — visible on load with its own entrance */}
         <Hero />
 
         <Reveal>
@@ -28,6 +33,9 @@ export default function Home() {
         </Reveal>
         <Reveal>
           <Experience />
+        </Reveal>
+        <Reveal>
+          <Agents />
         </Reveal>
         <Reveal>
           <Projects />

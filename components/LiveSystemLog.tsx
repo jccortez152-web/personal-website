@@ -1,9 +1,8 @@
 "use client";
 
-// Terminal-style "Live System Log" panel for the hero. Simulates a fleet-ops
-// log feed: a new line arrives every ~2s, oldest scrolls off after MAX_LINES.
-// Levels color-coded (OK/INFO/WARN/ERR). Real wall-clock timestamps so the
-// stream feels live. Pure visual — no real backend behind it.
+// Console-style log panel for the hero. Simulates a fleet-ops log feed: a new
+// line arrives every ~2s, oldest scrolls off after MAX_LINES. Labelled
+// "sample feed" and aria-hidden — pure decoration, no real backend behind it.
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -14,7 +13,7 @@ type Line = Event & { id: number; ts: string };
 
 const events: Event[] = [
   { lvl: "INFO", msg: "M2105 → wifi reconnect attempt" },
-  { lvl: "OK", msg: "ssh tunnel established · pdx-04" },
+  { lvl: "OK", msg: "ssh tunnel established" },
   { lvl: "WARN", msg: "sensor_array · timeout on /dev/ttyUSB1" },
   { lvl: "INFO", msg: "task resumed · route 412-A" },
   { lvl: "OK", msg: "M2105 → handoff to charging dock" },
@@ -22,7 +21,7 @@ const events: Event[] = [
   { lvl: "OK", msg: "M2102 → drift corrected · t=0.8s" },
   { lvl: "INFO", msg: "runbook · 'wifi-reconnect' → published" },
   { lvl: "WARN", msg: "M2107 → battery cell variance > threshold" },
-  { lvl: "INFO", msg: "M2107 → escalated to L2 · ticket #4421" },
+  { lvl: "INFO", msg: "M2107 → agent flagged anomaly · posted to slack" },
   { lvl: "OK", msg: "rosbag uploaded · 142MB → s3" },
   { lvl: "INFO", msg: "fleet status · 187 online · 3 charging" },
   { lvl: "OK", msg: "M2118 → returned to dock · trip #842" },
@@ -34,10 +33,10 @@ const MAX_LINES = 7;
 const TICK_MS = 1900;
 
 const lvlClass: Record<Level, string> = {
-  OK: "text-emerald-400",
-  INFO: "text-cyan-bright",
-  WARN: "text-amber-300",
-  ERR: "text-rose-400",
+  OK: "text-fg-2",
+  INFO: "text-muted",
+  WARN: "text-signal",
+  ERR: "text-signal",
 };
 
 const ts = (d: Date) => d.toTimeString().slice(0, 8);
@@ -86,31 +85,18 @@ export default function LiveSystemLog() {
   }, [lines]);
 
   return (
-    <div className="rounded-md border border-ink-800 bg-ink-950/80 backdrop-blur-sm font-mono text-xs overflow-hidden shadow-[0_20px_60px_-30px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.04)]">
+    <div
+      aria-hidden
+      className="rounded-card border border-line bg-surface font-mono text-[13px] overflow-hidden"
+    >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-ink-800 bg-ink-900/40">
-        <div className="flex items-center gap-3 text-ink-300">
-          <span className="relative flex w-1.5 h-1.5">
-            <span className="absolute inline-flex w-full h-full rounded-full bg-cyan-bright/60 animate-ping" />
-            <span className="relative inline-flex w-1.5 h-1.5 rounded-full bg-cyan-bright" />
-          </span>
-          <span className="uppercase tracking-[0.2em] text-[10px]">
-            live system log
-          </span>
-          <span className="text-ink-700">·</span>
-          <span className="text-ink-500 text-[10px]">
-            fleet ops · pdx-04
-          </span>
-        </div>
-        <div className="flex gap-1">
-          <span className="w-2 h-2 rounded-full bg-ink-700" />
-          <span className="w-2 h-2 rounded-full bg-ink-700" />
-          <span className="w-2 h-2 rounded-full bg-cyan-bright/70" />
-        </div>
+      <div className="flex items-center justify-between gap-4 px-4 py-3 border-b border-line">
+        <span className="label-mono text-fg-2">fleet log</span>
+        <span className="label-mono text-muted">sample feed</span>
       </div>
 
       {/* Log body */}
-      <div ref={scrollRef} className="px-4 py-3 h-[200px] overflow-y-auto">
+      <div ref={scrollRef} className="px-4 py-3 h-[216px] overflow-hidden bg-ink">
         <AnimatePresence initial={false}>
           {lines.map((l) => (
             <motion.div
@@ -121,11 +107,11 @@ export default function LiveSystemLog() {
               transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
               className="flex items-baseline gap-3 py-0.5 leading-relaxed"
             >
-              <span className="text-ink-600 shrink-0">[{l.ts}]</span>
+              <span className="text-muted shrink-0 hidden sm:inline">[{l.ts}]</span>
               <span className={`${lvlClass[l.lvl]} shrink-0 w-12`}>
                 [{l.lvl}]
               </span>
-              <span className="text-ink-200 truncate flex-1 min-w-0">
+              <span className="text-fg-2 truncate flex-1 min-w-0">
                 {l.msg}
               </span>
             </motion.div>
@@ -134,8 +120,8 @@ export default function LiveSystemLog() {
 
         {/* Prompt + blinking caret pinned to the bottom of the stream */}
         <div className="flex items-center gap-2 mt-1.5">
-          <span className="text-ink-600">$</span>
-          <span className="inline-block w-1.5 h-3 bg-cyan-bright/80 animate-caret" />
+          <span className="text-muted">$</span>
+          <span className="inline-block w-1.5 h-3 bg-signal animate-caret" />
         </div>
       </div>
     </div>

@@ -1,0 +1,9 @@
+# Never line-ending-convert binary assets (a PDF with stray CR bytes gets
+# corrupted by core.autocrlf otherwise).
+*.pdf   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.woff  binary
+*.woff2 binary
+*.ico   binary

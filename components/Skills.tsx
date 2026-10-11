@@ -1,60 +1,35 @@
-// Skills as typographic prose, not panels. Each group renders as a flowing
-// paragraph: italic-serif group title → em dash → comma-separated items.
-// Reads like a magazine "Tools of the Trade" sidebar.
+// Skills as grouped chip clusters.
 
 import { skills } from "@/lib/data";
+import SectionHeader from "./ui/SectionHeader";
 
 export default function Skills() {
   return (
-    <section
-      id="skills"
-      className="px-6 py-32 md:py-40 border-t border-ink-800/60"
-    >
-      <div className="max-w-7xl mx-auto">
-        <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-ink-500 flex items-center gap-3 mb-6">
-          <span>§ 02</span>
-          <span className="h-px w-8 bg-ink-700" />
-          <span>tools of the trade</span>
-        </div>
+    <section id="skills" className="px-4 md:px-8 py-24 md:py-32 border-t border-line">
+      <div className="max-w-6xl mx-auto">
+        <SectionHeader
+          index="02"
+          label="Skills"
+          title="What I work with."
+          sub="Tool-pragmatic: this is what I reach for now. Happy to learn whatever your team uses."
+        />
 
-        <h2 className="font-display font-light text-4xl md:text-5xl tracking-tight leading-[1.05] text-ink-100 max-w-3xl mb-16">
-          What I work with.
-        </h2>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
-          <div className="lg:col-span-9 space-y-12">
-            {skills.map((g) => (
-              <div key={g.group} className="border-t border-ink-800 pt-6">
-                <h3 className="font-display italic text-2xl md:text-3xl text-ink-100 mb-4">
-                  {g.group}
-                </h3>
-                <p className="text-ink-300 text-lg leading-relaxed">
-                  {g.items.map((item, i) => (
-                    <span key={item}>
-                      <span className="text-ink-100">{item}</span>
-                      {i < g.items.length - 1 && (
-                        <span className="text-ink-600">{" · "}</span>
-                      )}
-                    </span>
-                  ))}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          <aside className="lg:col-span-3 space-y-6 text-sm text-ink-400 leading-relaxed">
-            <p className="italic font-display text-lg text-ink-200">
-              A note on the stack.
-            </p>
-            <p>
-              I'm tool-pragmatic. The list above is what I reach for now;
-              what matters is the diagnostic instinct under it — and shipping
-              the next thing on Friday.
-            </p>
-            <p className="text-ink-500">
-              Happy to learn whatever your team uses.
-            </p>
-          </aside>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+          {skills.map((g) => (
+            <div key={g.group} className="border-t border-line pt-6">
+              <h3 className="text-xl font-bold text-fg mb-4">{g.group}</h3>
+              <ul className="flex flex-wrap gap-2">
+                {g.items.map((item) => (
+                  <li
+                    key={item}
+                    className="font-mono text-[13px] text-fg-2 px-3 py-1.5 border border-line rounded-full"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
     </section>

@@ -4,13 +4,13 @@ export const profile = {
   name: "Johannes Christopher O. Cortez",
   shortName: "Johannes Cortez",
   initials: "JC",
-  role: "Robotics Engineer",
+  role: "AI Automation Specialist · Robotics Fleet Ops",
   location: "New Manila, Quezon City, Philippines",
   email: "jccortez152@gmail.com",
   links: {
     linkedin: "https://www.linkedin.com/in/johannesongcortez/",
     github: "https://github.com/jccortez152-web",
-    resume: "/resume.pdf", // Drop the actual PDF into /public/resume.pdf
+    resume: "/resume.pdf",
   },
 };
 
@@ -21,6 +21,19 @@ export const education = {
 };
 
 export const skills: { group: string; items: string[] }[] = [
+  {
+    group: "AI & Agents",
+    items: [
+      "Claude API",
+      "Claude Code",
+      "Claude Skills",
+      "MCP",
+      "RAG",
+      "AI Agents",
+      "Prompt Engineering",
+      "OpenAI API",
+    ],
+  },
   {
     group: "Robotics & Diagnostics",
     items: [
@@ -44,12 +57,26 @@ export const skills: { group: string; items: string[] }[] = [
     ],
   },
   {
+    group: "Identity & Endpoint",
+    items: [
+      "Microsoft Entra ID",
+      "Intune",
+      "Conditional Access",
+      "MFA",
+      "VPN",
+      "Quick Assist",
+      "Exchange Online",
+    ],
+  },
+  {
     group: "Tools & Platforms",
     items: [
       "Linux (Ubuntu, Debian)",
+      "Grafana / Loki",
       "ServiceNow · Monday.com",
       "Make.com · Salesforce",
       "Slack · Microsoft Teams",
+      "Confluence",
       "Git · GitHub",
       "Microsoft 365 · Google Suite",
     ],
@@ -57,7 +84,7 @@ export const skills: { group: string; items: string[] }[] = [
   {
     group: "Automation · Internal Tools",
     items: [
-      "Cursor · Claude Code (vibe-coding)",
+      "Cursor · Claude Code",
       "Make.com · n8n (workflow automation)",
       "Slack Bolt integrations",
       "Email + form automation",
@@ -70,27 +97,29 @@ export const skills: { group: string; items: string[] }[] = [
 export const experience = [
   {
     company: "Relay Robotics",
-    role: "Robo Care Specialist (L1)",
+    role: "Robot Care Specialist | AI & Automation",
     period: "2024 — Present",
     bullets: [
-      "Advanced remote troubleshooting on a global fleet of autonomous service robots — using Linux diagnostics, system logs, and fleet monitoring tools to identify and resolve operational issues.",
-      "Guide on-site consultants and customer staff through step-by-step troubleshooting during diagnostics and live service incidents.",
-      "Investigate connectivity disruptions, navigation issues, sensor alerts, elevator interaction issues, and task cancellations — triaged from log data and live telemetry.",
-      "Collaborate closely with L2 engineers and Solutions Architects on complex investigations and escalated cases; learn advanced techniques and share them with the L1 team.",
-      "Publish weekly operational updates highlighting new technical findings, recurring issues, and troubleshooting insights for the wider RoboCare team.",
-      "Maintain detailed incident documentation and knowledge base articles so solutions get standardized and reused across shifts.",
-      "Recognized as a top-performing L1 specialist for fast ticket resolution and detailed case documentation.",
+      "Provide remote technical support for a global fleet of autonomous delivery robots in hospitals and hotels, diagnosing live faults across navigation, connectivity, sensors, docking, and elevator and door integrations using SSH, Linux logs, Grafana/Loki, and rosbag analysis.",
+      "Remotely support field technicians during robot installs, hardware swaps, and site commissioning.",
+      "Perform post-mortem analysis on incidents, reconstructing robot behavior from logs and rosbag data to pinpoint root causes.",
+      "Design and ship internal AI agents and automations, several sanctioned or extended at engineering leadership's request.",
+      "Author KB articles and weekly fleet-wide technical updates.",
+      "Partner with engineers and Solutions Architects on complex investigations.",
     ],
   },
   {
     company: "DXC Technology",
-    role: "Technical Solutions Representative III — Microsoft Global Helpdesk",
+    role: "Technical Solutions Representative III — Microsoft Global Helpdesk (Managed Services)",
     period: "2023 — 2024",
     bullets: [
-      "L1 enterprise technical support for Microsoft 365 services, authentication issues, and endpoint concerns at high case volume.",
-      "Logged and tracked cases in ServiceNow with accurate documentation and clean follow-ups.",
-      "Identified recurring issues and partnered with senior teams during escalations to improve service reliability.",
-      "Received the highest customer commendations on the team across three consecutive quarters; recognized as a top-performing L1 technician.",
+      "Delivered managed service support for Microsoft's global workforce under client SLAs.",
+      "Resolved Entra ID identity issues: lockouts, password resets, MFA, and sign-in failures.",
+      "Supported Intune-managed devices: enrollment, compliance, app deployments, and Conditional Access blocks.",
+      "Troubleshot corporate VPN connectivity; delivered remote support through Quick Assist and Teams.",
+      "Resolved Microsoft 365 issues across Outlook, Exchange Online, Teams, OneDrive, and SharePoint.",
+      "Managed incidents in ServiceNow following ITIL.",
+      "Highest customer commendations on the team for three consecutive quarters.",
     ],
   },
   {
@@ -101,6 +130,52 @@ export const experience = [
       "Built responsive web interfaces in HTML, CSS, and vanilla JavaScript.",
       "Collaborated with project stakeholders to deliver front-end solutions aligned with project goals and deadlines.",
     ],
+  },
+];
+
+// AI agents and automations. Rendered before the web-app projects, with the
+// same ProjectCard; no case-study modal, so no problem/solution fields.
+export type Agent = {
+  id: string;
+  name: string;
+  stack: string[];
+  summary: string;
+  result: string;
+};
+
+export const agents: Agent[] = [
+  {
+    id: "fleet-monitor",
+    name: "Live Fleet-Monitoring Agent",
+    stack: ["Claude Code", "SSH", "n8n"],
+    summary:
+      "Watches a robot's live logs during deliveries and flags anomalies with context. Uses a credential-separation design so the agent never holds robot credentials.",
+    result: "Approved by engineering for production robots.",
+  },
+  {
+    id: "case-filler",
+    name: "Salesforce Case Filler",
+    stack: ["Claude Skills", "Claude in Chrome", "Salesforce"],
+    summary:
+      "Reads each case's subject and comments and fills all categorization fields.",
+    result: "Removes a 2–3 minute manual step per case.",
+  },
+  {
+    id: "reply-alerts",
+    name: "Customer Reply Alerts",
+    stack: ["n8n", "Gmail", "Slack"],
+    summary:
+      "Detects genuine customer replies that Salesforce missed and routes them to Slack.",
+    result:
+      "Missed replies reach Slack in real time, plus alerts for cases idle 48+ hours.",
+  },
+  {
+    id: "qa-audit",
+    name: "QA Case Audit",
+    stack: ["Claude Skills", "Python", "ReportLab"],
+    summary:
+      "Scores each case's categorization against its comments.",
+    result: "Every case scored out of 100, with per-agent PDF reports.",
   },
 ];
 

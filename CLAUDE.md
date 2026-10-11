@@ -1,6 +1,6 @@
 # CLAUDE.md — Personal Website
 
-Project: Portfolio site for Johannes Christopher O. Cortez (Robotics Engineer / RoboCare Specialist). Audience is technical recruiters and engineering hiring managers; the site must communicate production-incident competence in under 10 seconds.
+Project: Portfolio site for Johannes Christopher O. Cortez (AI Automation Specialist · Robotics Fleet Ops; Robot Care Specialist at Relay Robotics). Audience is recruiters and hiring managers for AI automation / AI agent roles; the site must communicate "builds agents inside a live robotics operation" in under 10 seconds. Never use tier labels (L1/L2/L3).
 
 This file distills `front-end-skill.md` (design thinking) and `taste-skill.md` (engineering rules) into the working contract for this repo. When the two conflict, **taste-skill rules win** — they encode hard technical constraints.
 
@@ -10,8 +10,8 @@ This file distills `front-end-skill.md` (design thinking) and `taste-skill.md` (
 
 - **Framework:** Next.js (App Router), React Server Components by default.
 - **Styling:** Tailwind CSS. Check `package.json` for v3 vs v4 — never mix syntax. For v4, use `@tailwindcss/postcss`, not the v3 `tailwindcss` plugin.
-- **Motion:** Framer Motion for UI/Bento. GSAP/ThreeJS only for isolated full-page scrolltelling or canvas — never mix engines in the same tree.
-- **Icons:** `@phosphor-icons/react` or `@radix-ui/react-icons` only. Single global `strokeWidth` (1.5 or 2.0).
+- **Motion:** Framer Motion (wrapped in `MotionConfig reducedMotion="user"`) plus CSS keyframes in `globals.css`.
+- **Icons:** `lucide-react` (already installed). `strokeWidth` 1.75.
 - **Dependency rule:** Before importing any 3rd-party lib, verify it's in `package.json`. If missing, output the install command before the code.
 - **Client/Server split:** Any component using motion, hover physics, or local state must be a leaf with `'use client'` at the top. Server components render static layout only.
 - **Folder structure:** `/components`, `/app` (or `/pages`), `/styles`. Keep components small and reusable.
@@ -19,23 +19,26 @@ This file distills `front-end-skill.md` (design thinking) and `taste-skill.md` (
 ## 2. Active Design Dials (baseline)
 
 - `DESIGN_VARIANCE: 8` — asymmetric, split-screen, generous negative space. **Centered hero is BANNED.**
-- `MOTION_INTENSITY: 6` — fluid CSS + spring physics. Continuous micro-animations on key elements.
+- `MOTION_INTENSITY: 3` — subtle only: fade-and-rise on section enter (200–300ms), 150ms hover transitions. Everything disabled under `prefers-reduced-motion`.
 - `VISUAL_DENSITY: 4` — daily-app spacing, not airy gallery, not packed cockpit.
 
 Mobile (`< 768px`): collapse all asymmetric layouts to single column with `w-full px-4`.
 
 ## 3. Aesthetic Direction (this project)
 
-- **Theme:** Dark mode default. Off-black base (`zinc-950` / charcoal) — never `#000000`.
-- **Accent:** A single desaturated electric blue or cyan. Saturation < 80%. **No purple/blue gradient glows. No neon.**
-- **Tone:** Engineering / industrial — think production console, not consumer SaaS. Quiet confidence over hype.
-- **Typography:** Pair a distinctive display sans (`Geist`, `Satoshi`, `Cabinet Grotesk`, or `Outfit`) with a mono for numbers/codes (`Geist Mono` / `JetBrains Mono`). **`Inter` is banned.** Serifs are banned for this project (technical UI).
-- **Headlines:** `text-4xl md:text-6xl tracking-tighter leading-none`. Control hierarchy with weight + color, not just scale.
-- **Body:** `text-base text-zinc-400 leading-relaxed max-w-[65ch]`.
+"Fleet Console" theme. All tokens live in `app/globals.css` (`@theme`); use the utilities, never hardcoded colors.
+
+- **Colors:** `ink` #0E1A24 background, `surface` #13222E raised, `line` rgba(234,240,243,0.12) borders. Text `fg` #EAF0F3, `fg-2` #B4C3CD, `muted` #9FB2BF (body contrast ≥ 4.5:1).
+- **Accent:** `signal` #F2A93B amber, sparingly — links, key labels, active nav, focus rings, one highlight per section. Never large fills or body text. `live` #4FB286 only for "open to work" / live indicators.
+- **No** gradient washes, glow effects, heavy shadows, or emoji.
+- **Typography:** Space Grotesk (400/500/700) for display + body; JetBrains Mono for labels, section numbers, tags, code, metadata (`label-mono`: 13px uppercase, 0.15em). Both via `next/font`. `Inter` and serifs are banned.
+- **Scale:** `text-hero` (40→72px), `text-h2` (32→40px), `text-body` (17→18px, 1.6 line height).
+- **Components:** `SectionHeader` ("§ 02 · SKILLS" amber label + heading on a dot grid), `ProjectCard` (surface, 1px border, `card-hover` = amber border at 40% + 2px lift). Radius 10px cards (`rounded-card`), 999px chips. 8px spacing scale.
+- **Dot grid** (`dot-grid`, 28px) only behind the hero and section headers.
 
 ## 4. Layout Rules
 
-- Page container: `max-w-7xl mx-auto` (or `max-w-[1400px]`).
+- Page container: `max-w-6xl mx-auto px-4 md:px-8`.
 - Full-height sections: `min-h-[100dvh]`. **Never `h-screen`** — breaks iOS Safari.
 - Multi-column: CSS Grid (`grid grid-cols-1 md:grid-cols-3 gap-6`). Never flexbox `calc()` math.
 - **The 3-equal-cards row is BANNED.** Use Bento (asymmetric tiles), zig-zag 2-col, or horizontal scroll instead.
@@ -44,11 +47,9 @@ Mobile (`< 768px`): collapse all asymmetric layouts to single column with `w-ful
 ## 5. Motion Rules
 
 - Animate only `transform` and `opacity`. Never `top`/`left`/`width`/`height`.
-- Spring defaults: `type: "spring", stiffness: 100, damping: 20`. No linear easing.
-- Magnetic / continuous hover: `useMotionValue` + `useTransform`. **Never `useState` for per-frame motion.**
-- Staggered reveals: `staggerChildren` (parent + children in same client tree) or CSS `animation-delay: calc(var(--index) * 100ms)`.
-- Perpetual loops (pulse, shimmer, marquee, typewriter) must be memoized and isolated in their own tiny `'use client'` leaf — never re-render the parent layout.
-- Tactile feedback on `:active`: `-translate-y-[1px]` or `scale-[0.98]`.
+- Section enter: `Reveal` (260ms ease-out fade-and-rise, once). Hover: 150ms.
+- No parallax, magnetic hover, shimmer, scan lines, or marquees.
+- Reduced motion: `globals.css` disables all CSS animation/transition and forces `[data-reveal]` visible; keep server/client markup identical (don't branch on `useReducedMotion` during render).
 
 ## 6. Required States
 

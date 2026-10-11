@@ -1,152 +1,100 @@
-// Hero — robotics-engineer control-panel feel.
-// Layout (top → bottom):
-//   1. Top kicker
-//   2. Masthead grid: huge animated name on the left, floating cutout portrait on the right
-//   3. Italic-serif tagline + body
-//   4. CTAs
-//   5. Live System Log panel (full width — the "live system" anchor)
-//   6. Currently-shipping footnote line
+// Hero — left-aligned intro, framed portrait on the right, a dotted amber
+// "robot route" running beneath, then the sample log console.
 
-import { ArrowUpRight, Download, Terminal } from "lucide-react";
-import HeroVisualLayers from "./ui/HeroVisualLayers";
-import CurrentlyRotator from "./ui/CurrentlyRotator";
-import AnimatedMasthead from "./ui/AnimatedMasthead";
-import AnimatedPortrait from "./ui/AnimatedPortrait";
+import Image from "next/image";
+import { ArrowRight, Download, Terminal } from "lucide-react";
 import LiveSystemLog from "./LiveSystemLog";
+import RobotRoute from "./ui/RobotRoute";
 import { profile } from "@/lib/data";
 
 export default function Hero() {
   return (
-    <section
-      id="top"
-      className="relative min-h-[100dvh] pt-28 pb-16 px-6 overflow-hidden"
-    >
-      <HeroVisualLayers />
-
-      {/* Soft mesh-gradient backdrop, slow drift */}
+    <section id="top" className="relative overflow-hidden">
+      {/* Dot grid, faded out toward the text column */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 pointer-events-none animate-mesh-drift"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 50% at 12% 28%, rgba(163,230,53,0.08) 0%, transparent 60%), radial-gradient(ellipse 50% 60% at 90% 80%, rgba(163,230,53,0.05) 0%, transparent 60%)",
-        }}
+        className="absolute inset-0 dot-grid pointer-events-none [mask-image:linear-gradient(to_left,black_15%,transparent_65%)]"
       />
 
-      <div className="max-w-7xl mx-auto relative">
-        {/* Top kicker */}
-        <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-ink-500">
-          <span className="h-px w-8 bg-ink-700" />
-          <span>/portfolio · 2026</span>
-          <span className="text-ink-700">·</span>
-          <span>robotics + AI</span>
-          <span className="hidden md:inline-block h-px flex-1 bg-ink-800/60 ml-2" />
-          <span className="hidden md:inline-flex items-center gap-2 ml-auto text-ink-400">
-            <span className="relative flex w-1.5 h-1.5">
-              <span className="absolute inline-flex w-full h-full rounded-full bg-cyan-bright/60 animate-ping" />
-              <span className="relative inline-flex w-1.5 h-1.5 rounded-full bg-cyan-bright" />
-            </span>
-            open to work
-          </span>
-        </div>
+      <div className="relative max-w-6xl mx-auto px-4 md:px-8 pt-16 md:pt-24 pb-16 md:pb-24">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 lg:gap-16 items-center">
+          <div className="md:col-span-7 animate-rise">
+            <div className="flex flex-wrap items-center gap-4">
+              <p className="label-mono text-muted">Portfolio · 2026</p>
+              <p className="inline-flex items-center gap-2 rounded-full border border-live/40 px-3 py-1 label-mono text-live">
+                <span aria-hidden className="relative flex w-2 h-2">
+                  <span className="absolute inline-flex w-full h-full rounded-full bg-live/60 animate-ping" />
+                  <span className="relative inline-flex w-2 h-2 rounded-full bg-live" />
+                </span>
+                Open to work
+              </p>
+            </div>
 
-        {/* Masthead grid */}
-        <div className="mt-14 lg:mt-20 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
-          {/* Name + statement */}
-          <div className="lg:col-span-8 space-y-7">
-            <AnimatedMasthead />
+            <h1 className="mt-6 text-hero font-bold text-fg">
+              Johannes Cortez
+            </h1>
 
-            <p className="font-display italic text-ink-200 leading-snug max-w-2xl text-2xl md:text-3xl lg:text-[2.5rem]">
-              Robotics Engineer
-              <span className="text-cyan-bright"> · </span>
-              solving live system failures.
+            <p className="mt-4 text-xl md:text-2xl font-medium text-fg-2">
+              AI Automation Specialist · Robotics Fleet Ops
             </p>
 
-            <p className="text-base md:text-lg text-ink-400 max-w-xl leading-relaxed">
-              I diagnose robot failures from log data and live telemetry —
-              and build the internal tools that prevent the next one.
-              Front-line on a global fleet from {profile.location.split(",")[0]}.
-              Open to AI / automation roles next.
+            <p className="mt-6 text-body text-muted max-w-xl">
+              I build AI agents and automations that replace manual work,
+              inside a live, safety-critical robotics operation. Open to AI
+              automation and AI agent roles.
             </p>
 
-            <div className="flex flex-wrap items-center gap-x-7 gap-y-3 pt-2">
+            <div className="mt-8 flex flex-wrap gap-3">
               <a
-                href="#projects"
-                className="group inline-flex items-center gap-2 text-ink-100 relative pb-1"
+                href="#agents"
+                className="group inline-flex items-center gap-2 min-h-12 px-6 rounded-card bg-signal text-ink font-bold transition-colors duration-150 hover:bg-signal/90"
               >
-                <span className="font-display italic text-lg">View work</span>
-                <ArrowUpRight
-                  className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform"
-                  strokeWidth={1.5}
+                View work
+                <ArrowRight
+                  className="w-4 h-4 transition-transform duration-150 group-hover:translate-x-0.5"
+                  strokeWidth={1.75}
+                  aria-hidden
                 />
-                {/* Animated underline grows from left on hover */}
-                <span className="absolute left-0 bottom-0 h-px bg-cyan-bright w-full origin-left scale-x-100 group-hover:bg-cyan-bright transition-colors" />
-              </a>
-              <a
-                href="#about"
-                className="group inline-flex items-center text-ink-300 hover:text-ink-100 transition-colors font-display italic text-lg relative pb-1"
-              >
-                Read about
-                <span className="absolute left-0 bottom-0 h-px bg-ink-300 w-0 group-hover:w-full transition-all duration-300" />
               </a>
               <a
                 href={profile.links.resume}
-                className="group inline-flex items-center gap-1.5 text-ink-400 hover:text-cyan-bright transition-colors font-mono text-xs uppercase tracking-wider"
+                className="inline-flex items-center gap-2 min-h-12 px-6 rounded-card border border-line text-fg font-medium transition-colors duration-150 hover:border-signal/40"
               >
-                <Download
-                  className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform"
-                  strokeWidth={1.5}
-                />
-                resume
+                <Download className="w-4 h-4" strokeWidth={1.75} aria-hidden />
+                Resume
               </a>
               <a
                 href="#demo"
-                className="group inline-flex items-center gap-1.5 text-ink-500 hover:text-cyan-bright transition-colors font-mono text-xs uppercase tracking-wider ml-auto"
+                className="inline-flex items-center gap-2 min-h-12 px-6 rounded-card border border-line text-fg font-medium transition-colors duration-150 hover:border-signal/40"
               >
-                <Terminal className="w-3.5 h-3.5" strokeWidth={1.5} />
-                live demo
+                <Terminal className="w-4 h-4" strokeWidth={1.75} aria-hidden />
+                Live demo
               </a>
             </div>
           </div>
 
-          {/* Portrait — transparent cutout, lime halo, float + cursor parallax */}
-          <div className="lg:col-span-4">
-            <figure className="relative">
-              <div className="hidden lg:block absolute -left-7 top-2 -rotate-90 origin-top-left font-display italic text-ink-500 text-xs whitespace-nowrap z-10">
-                fig. 01 — the engineer
-              </div>
-
-              {/* Glow + scan layers all live inside AnimatedPortrait now,
-                  so the halo follows the float instead of staying static. */}
-              <AnimatedPortrait
+          <figure className="md:col-span-5 w-full max-w-sm md:max-w-none animate-rise">
+            <div className="relative aspect-[4/5] rounded-card border border-line bg-surface overflow-hidden">
+              <Image
                 src="/jc-portrait.png"
-                alt={`${profile.name} — ${profile.role}`}
+                alt={`Portrait of ${profile.name}`}
+                fill
+                priority
+                sizes="(min-width: 768px) 40vw, 384px"
+                className="object-cover object-bottom"
               />
-
-              <figcaption className="mt-3 flex items-baseline justify-between font-mono text-[10px] uppercase tracking-[0.25em] text-ink-500">
-                <span className="text-ink-300">{profile.shortName}</span>
-                <span>JC · 2026</span>
-              </figcaption>
-            </figure>
-          </div>
+            </div>
+            <figcaption className="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 label-mono text-muted">
+              <span className="text-fg-2 whitespace-nowrap">{profile.shortName}</span>
+              <span className="whitespace-nowrap">Quezon City, PH</span>
+            </figcaption>
+          </figure>
         </div>
 
-        {/* Live system log — fleet ops feed, anchors the "live engineer" feel */}
-        <div className="mt-14 lg:mt-20">
+        <RobotRoute className="mt-12 md:mt-16" />
+
+        <div className="mt-8">
           <LiveSystemLog />
-        </div>
-
-        {/* Footnote: currently shipping rotator */}
-        <div className="mt-10 pt-5 border-t border-ink-800/60 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 font-mono text-[11px] uppercase tracking-[0.2em] text-ink-500">
-          <span className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-bright" />
-            currently shipping
-          </span>
-          <span className="text-ink-300 normal-case tracking-normal text-sm font-sans">
-            <CurrentlyRotator />
-          </span>
-          <span className="hidden sm:inline-block h-px flex-1 bg-ink-800/60" />
-          <span className="text-ink-500">last commit · 14m ago</span>
         </div>
       </div>
     </section>

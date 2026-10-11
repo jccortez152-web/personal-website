@@ -1,56 +1,44 @@
-// Experience as an editorial timeline. Years in italic display serif,
-// company names as bold sans, bullets as flowing prose with key terms
-// emphasized. No timeline rail dots.
+// Experience as a vertical timeline: thin rail, amber dot per role, each
+// role in a raised card.
 
 import { experience } from "@/lib/data";
+import SectionHeader from "./ui/SectionHeader";
 
 export default function Experience() {
   return (
-    <section
-      id="experience"
-      className="px-6 py-32 md:py-40 border-t border-ink-800/60"
-    >
-      <div className="max-w-7xl mx-auto">
-        <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-ink-500 flex items-center gap-3 mb-6">
-          <span>§ 03</span>
-          <span className="h-px w-8 bg-ink-700" />
-          <span>track record</span>
-        </div>
+    <section id="experience" className="px-4 md:px-8 py-24 md:py-32 border-t border-line">
+      <div className="max-w-6xl mx-auto">
+        <SectionHeader index="03" label="Experience" title="Where the work happened." />
 
-        <h2 className="font-display font-light text-4xl md:text-5xl tracking-tight leading-[1.05] text-ink-100 max-w-3xl mb-20">
-          Where the work happened.
-        </h2>
-
-        <div className="space-y-20 md:space-y-28">
+        <ol className="relative max-w-4xl">
+          <span aria-hidden className="absolute left-[5px] top-2 bottom-2 w-px bg-line" />
           {experience.map((e) => (
-            <article
-              key={e.company + e.role}
-              className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16"
-            >
-              {/* Year + company on the left */}
-              <header className="lg:col-span-4 space-y-3 lg:sticky lg:top-24 self-start">
-                <div className="font-display italic text-3xl md:text-4xl text-cyan-bright tracking-tight leading-none">
-                  {e.period}
-                </div>
-                <h3 className="text-2xl md:text-3xl font-medium text-ink-100 tracking-tight">
+            <li key={e.company + e.role} className="relative pl-8 md:pl-12 pb-8 last:pb-0">
+              <span
+                aria-hidden
+                className="absolute left-0 top-8 w-[11px] h-[11px] rounded-full bg-signal ring-4 ring-ink"
+              />
+              <article className="card-hover bg-surface border border-line rounded-card p-6 md:p-8">
+                <p className="label-mono text-muted">{e.period}</p>
+                <h3 className="mt-2 text-2xl font-bold tracking-tight text-fg">
                   {e.company}
                 </h3>
-                <p className="text-ink-400 italic font-display text-lg">
-                  {e.role}
-                </p>
-              </header>
-
-              {/* Bullets as flowing prose */}
-              <div className="lg:col-span-8 space-y-6 text-ink-300 leading-relaxed text-lg">
-                {e.bullets.map((b) => (
-                  <p key={b} className="border-l border-ink-800 pl-6">
-                    {b}
-                  </p>
-                ))}
-              </div>
-            </article>
+                <p className="mt-1 text-fg-2 font-medium">{e.role}</p>
+                <ul className="mt-6 space-y-3 text-muted leading-relaxed">
+                  {e.bullets.map((b) => (
+                    <li key={b} className="relative pl-5">
+                      <span
+                        aria-hidden
+                        className="absolute left-0 top-[0.7em] w-2 h-px bg-fg-2"
+                      />
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
   );

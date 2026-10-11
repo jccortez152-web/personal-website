@@ -1,123 +1,91 @@
-// Long-form magazine profile. Drops the dashboard fact-rail in favor of
-// editorial prose with a pull quote, plus a tight sidebar of "vitals" and
-// the current stack.
+// About — prose and pull quote on the left, a sidebar of vitals, current
+// work, stack, receipts, and education on the right.
 
 import { education, profile } from "@/lib/data";
+import SectionHeader from "./ui/SectionHeader";
+
+const stack = [
+  "Claude Code",
+  "Claude Skills",
+  "n8n",
+  "Next.js",
+  "Supabase",
+  "Slack Bolt",
+  "Vercel",
+];
 
 export default function About() {
   return (
-    <section
-      id="about"
-      className="px-6 py-32 md:py-40 border-t border-ink-800/60"
-    >
-      <div className="max-w-7xl mx-auto">
-        {/* Section breadcrumb */}
-        <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-ink-500 flex items-center gap-3 mb-12">
-          <span>§ 01</span>
-          <span className="h-px w-8 bg-ink-700" />
-          <span>about</span>
-        </div>
+    <section id="about" className="px-4 md:px-8 py-24 md:py-32 border-t border-line">
+      <div className="max-w-6xl mx-auto">
+        <SectionHeader index="01" label="About" title="Hi, I'm Johannes." />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
-          {/* Long-form prose */}
-          <article className="lg:col-span-7 space-y-7 text-ink-200 text-lg leading-relaxed">
-            <h2 className="font-display font-light text-4xl md:text-5xl tracking-tight leading-[1.05] text-ink-100 mb-8">
-              Hi, I'm Johannes.
-              <br />
-              <span className="italic text-ink-300">A short profile.</span>
-            </h2>
-
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+          <article className="lg:col-span-7 space-y-6 text-body text-fg-2">
             <p>
-              I'm an L1 RoboCare Specialist at Relay Robotics, currently in
-              the seat where production robot fleets meet the people running
-              them. My day is logs, telemetry, and live incidents — not
-              whiteboards.
+              I'm a Robot Care Specialist at Relay Robotics, supporting
+              autonomous delivery robots in hospitals and hotels worldwide. My
+              day is logs, telemetry, live incidents, and remote support for
+              field technicians, plus post-mortems that turn every failure
+              into a fix.
             </p>
 
             <p>
-              I work the diagnostic path most tickets need: reading the
-              rosbag, reproducing the fault, writing the runbook so the next
-              person on shift doesn't start from zero. When a fault actually
-              needs L2, they get a clean trace — not a "have you tried turning
-              it off and on again."
+              When a manual process or blind spot slows the team down, I
+              automate it: AI agents that watch live robot logs, Claude Skills
+              that handle case triage and QA, and n8n workflows that connect
+              Salesforce, Gmail, and Slack.
             </p>
 
-            {/* Pull quote */}
-            <blockquote className="my-10 pl-6 border-l-2 border-cyan-bright/70 font-display italic text-2xl md:text-3xl leading-snug text-ink-100">
-              "Most tickets close at L1.
-              <br />
-              The rest get a clean trace,
-              <br />
-              not a shrug."
+            <blockquote className="!mt-10 pl-6 border-l-2 border-signal text-2xl md:text-[1.75rem] font-medium leading-snug text-fg">
+              &ldquo;Every manual step is a candidate for an agent.&rdquo;
             </blockquote>
-
-            <p>
-              When a runbook isn't enough, I ship the workflow that replaces
-              it.{" "}
-              <span className="text-ink-100 italic font-display">
-                RoboChat
-              </span>{" "}
-              is the chat link hospital nurses open to reach me — every
-              customer conversation lands in a Slack channel instead of a
-              missed phone call. The{" "}
-              <span className="text-ink-100 italic font-display">
-                Reimbursement Portal
-              </span>{" "}
-              turned a spreadsheet-and-email loop into one-click approvals.
-              I build fast with{" "}
-              <span className="font-mono text-base text-ink-100">
-                Claude Code
-              </span>{" "}
-              and{" "}
-              <span className="font-mono text-base text-ink-100">Cursor</span>
-              , shipping in days, not quarters.
-            </p>
-
-            <p className="text-ink-300">
-              Open to roles in robotics ops, internal tooling, or AI /
-              automation — and to growing into the latter from the
-              operator's seat.
-            </p>
           </article>
 
-          {/* Sidebar — vitals + stack */}
-          <aside className="lg:col-span-4 lg:col-start-9 space-y-10 lg:pt-2">
+          <aside className="lg:col-span-5 space-y-8">
             <Block label="Vitals">
               <Row k="Location" v={profile.location} />
-              <Row k="Role" v="L1 RoboCare Specialist" />
+              <Row k="Role" v="Robot Care Specialist · AI & Automation" />
               <Row k="Company" v="Relay Robotics, 2024 →" />
-              <Row k="Open to" v="AI + Robotics roles" accent />
+              <div className="flex items-baseline justify-between gap-4">
+                <dt className="label-mono text-muted shrink-0">Open to</dt>
+                <dd className="inline-flex items-center gap-2 text-right text-live font-medium">
+                  <span aria-hidden className="w-2 h-2 rounded-full bg-live shrink-0" />
+                  AI Automation · AI Agent roles
+                </dd>
+              </div>
             </Block>
 
             <Block label="Currently building">
-              <Row k="01" v="The RoboChat customer widget" />
-              <Row k="02" v="Reimbursement portal at Relay" />
-              <Row k="03" v="jcortez.dev (this site)" />
+              <Row k="01" v="Live Fleet-Monitoring Agent" />
             </Block>
 
-            <Block label="Stack today">
-              <p className="text-ink-200 text-sm leading-relaxed">
-                <span className="text-ink-100 font-mono">Cursor</span> ·{" "}
-                <span className="text-ink-100 font-mono">Claude Code</span> ·{" "}
-                <span className="text-ink-100 font-mono">Next.js</span> ·{" "}
-                <span className="text-ink-100 font-mono">Supabase</span> ·{" "}
-                <span className="text-ink-100 font-mono">Slack Bolt</span> ·{" "}
-                <span className="text-ink-100 font-mono">Vercel</span> ·{" "}
-                <span className="text-ink-100 font-mono">n8n</span>
-              </p>
-            </Block>
+            <div className="border-t border-line pt-4">
+              <h3 className="label-mono text-muted mb-4">Stack today</h3>
+              <ul className="flex flex-wrap gap-2">
+                {stack.map((s) => (
+                  <li
+                    key={s}
+                    className="font-mono text-[13px] text-fg-2 px-3 py-1 border border-line rounded-full"
+                  >
+                    {s}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-            <Block label="Receipts">
-              <p className="text-ink-300 text-sm leading-relaxed">
-                Highest customer commendations on the team across three
-                consecutive quarters at DXC. Top-performing L1 specialist at
-                Relay for fast ticket resolution and case documentation.
+            <div className="border-t border-line pt-4">
+              <h3 className="label-mono text-muted mb-4">Receipts</h3>
+              <p className="text-fg-2 leading-relaxed">
+                Highest customer commendations on the team for three
+                consecutive quarters at DXC. Top performer for customer
+                satisfaction and commendations at Relay.
               </p>
-            </Block>
+            </div>
 
             <Block label="Education">
               <Row k="Degree" v="BS Computer Engineering" />
-              <Row k="School" v="University of the East — Manila" />
+              <Row k="School" v={education.school} />
               <Row k="Years" v={education.period} />
             </Block>
           </aside>
@@ -135,34 +103,18 @@ function Block({
   children: React.ReactNode;
 }) {
   return (
-    <div className="border-t border-ink-800 pt-4">
-      <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-cyan-bright/80 mb-4">
-        {label}
-      </div>
-      <div className="space-y-2">{children}</div>
+    <div className="border-t border-line pt-4">
+      <h3 className="label-mono text-muted mb-4">{label}</h3>
+      <dl className="space-y-3">{children}</dl>
     </div>
   );
 }
 
-function Row({
-  k,
-  v,
-  accent,
-}: {
-  k: string;
-  v: string;
-  accent?: boolean;
-}) {
+function Row({ k, v }: { k: string; v: string }) {
   return (
-    <div className="flex items-baseline justify-between gap-4 text-sm">
-      <span className="font-mono text-ink-500 text-xs uppercase tracking-wider shrink-0">
-        {k}
-      </span>
-      <span
-        className={`text-right ${accent ? "text-cyan-bright italic font-display text-base" : "text-ink-100"}`}
-      >
-        {v}
-      </span>
+    <div className="flex items-baseline justify-between gap-4">
+      <dt className="label-mono text-muted shrink-0">{k}</dt>
+      <dd className="text-right text-fg">{v}</dd>
     </div>
   );
 }
