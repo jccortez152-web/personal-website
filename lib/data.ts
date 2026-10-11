@@ -135,12 +135,15 @@ export const experience = [
 
 // AI agents and automations. Rendered before the web-app projects, with the
 // same ProjectCard; no case-study modal, so no problem/solution fields.
+// `video` is the base name of public/videos/<name>.mp4 (+ posters/<name>.jpg);
+// the card only shows a player if that file exists at build time.
 export type Agent = {
   id: string;
   name: string;
-  stack: string[];
+  stack?: string[];
   summary: string;
-  result: string;
+  result?: string;
+  video?: string;
 };
 
 export const agents: Agent[] = [
@@ -151,6 +154,48 @@ export const agents: Agent[] = [
     summary:
       "Watches a robot's live logs during deliveries and flags anomalies with context. Uses a credential-separation design so the agent never holds robot credentials.",
     result: "Approved by engineering for production robots.",
+    video: "live-fleet-monitoring-agent",
+  },
+  {
+    id: "case-queue",
+    name: "Autonomous Case-Queue Agent",
+    stack: ["Anthropic SDK", "Python"],
+    summary:
+      "Continuous-loop agent on the Anthropic SDK that picks up new support cases on a timer and backs off when the queue is empty.",
+    video: "autonomous-case-queue-agent",
+  },
+  {
+    id: "ops-suite",
+    name: "Ops Automation Suite",
+    stack: ["n8n", "Gmail", "Slack", "Salesforce"],
+    summary:
+      "Detects genuine customer replies that Salesforce missed and routes them to Slack.",
+    result:
+      "Missed replies reach Slack in real time, plus flags for cases idle 48+ hours or that appear deleted.",
+    video: "ops-automation-suite",
+  },
+  {
+    id: "chrome-slack-monitor",
+    name: "Claude in Chrome & Slack Monitoring",
+    stack: ["Claude in Chrome", "Grafana", "Slack"],
+    summary:
+      "Monitors production robots through the log dashboard and live map the moment a delivery starts, triggered by a Slack alert.",
+    video: "claude-in-chrome-slack-monitoring",
+  },
+  {
+    id: "robocare-skill",
+    name: "RoboCare Specialist Skill",
+    stack: ["Claude Skills", "Atlassian Rovo MCP", "Confluence", "Slack MCP"],
+    summary:
+      "One Claude skill holding our full diagnostic playbook, elevator SOPs and KB authoring via Confluence MCP.",
+    video: "robocare-specialist-skill",
+  },
+  {
+    id: "team-dashboard",
+    name: "Team Performance Dashboard",
+    summary:
+      "CSV-upload dashboard showing each agent's case count against the team average, mapped to the scorecard's star bands.",
+    video: "team-performance-dashboard",
   },
   {
     id: "case-filler",
@@ -161,35 +206,32 @@ export const agents: Agent[] = [
     result: "Removes a 2–3 minute manual step per case.",
   },
   {
-    id: "reply-alerts",
-    name: "Customer Reply Alerts",
-    stack: ["n8n", "Gmail", "Slack"],
-    summary:
-      "Detects genuine customer replies that Salesforce missed and routes them to Slack.",
-    result:
-      "Missed replies reach Slack in real time, plus alerts for cases idle 48+ hours.",
-  },
-  {
     id: "qa-audit",
     name: "QA Case Audit",
     stack: ["Claude Skills", "Python", "ReportLab"],
     summary:
       "Scores each case's categorization against its comments.",
     result: "Every case scored out of 100, with per-agent PDF reports.",
+    video: "qa-case-audit-skill",
   },
 ];
 
 export type ProjectSpan = "wide" | "narrow";
 
+// Projects with problem/solution/impact get the case-study modal; the rest
+// show `summary` and an optional external link.
 export type Project = {
   id: string;
   name: string;
-  tagline: string;
+  tagline?: string;
   span: ProjectSpan;
-  problem: string;
-  solution: string;
-  stack: string[];
-  impact: string;
+  summary?: string;
+  problem?: string;
+  solution?: string;
+  stack?: string[];
+  impact?: string;
+  link?: { href: string; label: string };
+  video?: string;
 };
 
 export const projects: Project[] = [
@@ -205,6 +247,7 @@ export const projects: Project[] = [
     stack: ["Next.js", "Slack Bolt", "Supabase", "Server-Sent Events"],
     impact:
       "Compressed nurse-to-engineer first-response time and replaced phone-tag with an async-friendly channel. Every conversation now lands in a searchable Slack channel for handoff and follow-up.",
+    video: "robochat",
   },
   {
     id: "reimbursement",
@@ -218,6 +261,7 @@ export const projects: Project[] = [
     stack: ["Next.js", "Supabase", "Resend", "Tailwind"],
     impact:
       "Replaced the spreadsheet-and-email dance with a single tracked workflow. Faster turnaround, nothing falls through, cleaner quarter-close.",
+    video: "reimbursement-portal",
   },
   {
     id: "robocare-web",
@@ -244,6 +288,25 @@ export const projects: Project[] = [
     stack: ["Next.js", "Supabase", "Tailwind", "Internal SSO"],
     impact:
       "Turned a scattered perks process into a real internal product. Admins manage inventory once; employees self-serve from there.",
+    video: "internal-employee-store",
+  },
+  {
+    id: "custom-crm",
+    name: "Custom CRM",
+    span: "wide",
+    summary:
+      "Contacts, kanban pipeline, activity timeline, real email via Resend, audit log, and Facebook/Instagram lead capture via Zapier.",
+    stack: ["Resend", "Zapier"],
+    link: { href: "https://crm-project-pied.vercel.app", label: "View live site" },
+    video: "custom-crm",
+  },
+  {
+    id: "content-pipeline",
+    name: "Content Pipeline App",
+    span: "narrow",
+    summary:
+      "Built for social media manager clients to manage content production from idea to posted.",
+    video: "content-pipeline-app",
   },
 ];
 

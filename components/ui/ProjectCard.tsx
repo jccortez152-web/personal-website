@@ -1,9 +1,12 @@
 // Shared card for agents and web-app projects. Raised surface, 1px border,
-// amber border + 2px lift on hover. Optional mono stack header, "Result:" row,
-// and case-study button (only where a case study exists).
+// amber border + 2px lift on hover. Optional demo video, mono stack header,
+// "Result:" row, case-study button (only where a case study exists), and
+// external link.
 
 import { ArrowUpRight } from "lucide-react";
 import { ReactNode } from "react";
+import type { VideoAsset } from "@/lib/videos";
+import DemoVideo from "./DemoVideo";
 
 export default function ProjectCard({
   name,
@@ -12,6 +15,8 @@ export default function ProjectCard({
   children,
   tags,
   result,
+  video,
+  link,
   onOpenCaseStudy,
   className = "",
 }: {
@@ -21,6 +26,8 @@ export default function ProjectCard({
   children: ReactNode;
   tags?: string[];
   result?: string;
+  video?: VideoAsset;
+  link?: { href: string; label: string };
   onOpenCaseStudy?: () => void;
   className?: string;
 }) {
@@ -28,6 +35,12 @@ export default function ProjectCard({
     <article
       className={`card-hover flex flex-col bg-surface border border-line rounded-card p-6 md:p-8 ${className}`}
     >
+      {video && (
+        <div className="mb-6">
+          <DemoVideo title={name} src={video.src} poster={video.poster} />
+        </div>
+      )}
+
       {stackHeader && (
         <p className="label-mono text-muted pb-4 mb-6 border-b border-line">
           {stackHeader.join(" / ")}
@@ -74,6 +87,23 @@ export default function ProjectCard({
             aria-hidden
           />
         </button>
+      )}
+
+      {link && (
+        <a
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group mt-6 self-start inline-flex items-center gap-2 min-h-11 text-signal font-medium"
+        >
+          {link.label}
+          <ArrowUpRight
+            className="w-4 h-4 transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+            strokeWidth={1.75}
+            aria-hidden
+          />
+          <span className="sr-only">(opens in a new tab)</span>
+        </a>
       )}
     </article>
   );

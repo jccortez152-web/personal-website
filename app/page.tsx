@@ -10,8 +10,14 @@ import Certifications from "@/components/Certifications";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/ui/Reveal";
+import { projects } from "@/lib/data";
+import { getVideos } from "@/lib/videos";
 
 export default function Home() {
+  // Resolved at build time; Projects is a client component so it can't read
+  // public/videos itself.
+  const projectVideos = getVideos(projects.map((p) => p.video));
+
   return (
     <>
       <a
@@ -38,7 +44,7 @@ export default function Home() {
           <Agents />
         </Reveal>
         <Reveal>
-          <Projects />
+          <Projects videos={projectVideos} />
         </Reveal>
         <Reveal>
           <RoboChatDemo />

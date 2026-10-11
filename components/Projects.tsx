@@ -7,10 +7,11 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { projects } from "@/lib/data";
+import type { VideoMap } from "@/lib/videos";
 import ProjectCard from "./ui/ProjectCard";
 import SectionHeader from "./ui/SectionHeader";
 
-export default function Projects() {
+export default function Projects({ videos = {} }: { videos?: VideoMap }) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const active = projects.find((p) => p.id === activeId);
 
@@ -34,7 +35,7 @@ export default function Projects() {
           index="05"
           label="Work"
           title="Things I've shipped."
-          sub="Internal web apps that closed real operational gaps."
+          sub="Web apps, from internal tools that closed real operational gaps at Relay to builds for clients."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -44,10 +45,12 @@ export default function Projects() {
               name={p.name}
               tagline={p.tagline}
               tags={p.stack}
-              onOpenCaseStudy={() => setActiveId(p.id)}
+              video={p.video ? videos[p.video] : undefined}
+              link={p.link}
+              onOpenCaseStudy={p.problem ? () => setActiveId(p.id) : undefined}
               className={p.span === "wide" ? "lg:col-span-7" : "lg:col-span-5"}
             >
-              <p>{p.problem}</p>
+              <p>{p.problem ?? p.summary}</p>
             </ProjectCard>
           ))}
         </div>
@@ -101,7 +104,7 @@ export default function Projects() {
                   <div>
                     <h4 className="label-mono text-muted mb-3">Stack</h4>
                     <ul className="flex flex-wrap gap-2">
-                      {active.stack.map((s) => (
+                      {active.stack?.map((s) => (
                         <li
                           key={s}
                           className="font-mono text-[13px] text-fg-2 px-3 py-1 border border-line rounded-full"
@@ -128,9 +131,10 @@ function Block({
   highlight,
 }: {
   label: string;
-  body: string;
+  body?: string;
   highlight?: boolean;
 }) {
+  if (!body) return null;
   return (
     <div>
       <h4 className="label-mono text-muted mb-3">{label}</h4>

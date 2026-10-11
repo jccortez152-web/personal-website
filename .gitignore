@@ -7,3 +7,6 @@ build
 *.tsbuildinfo
 next-env.d.ts
 .vercel
+
+# Uncompressed demo video sources (compressed copies live in public/videos)
+Video Presentation/
