@@ -1,102 +1,85 @@
-// Hero — left-aligned intro, framed portrait on the right, a dotted amber
-// "robot route" running beneath, then the sample log console.
+// Hero — headline and actions on the left, the floor plan on the right with a
+// staff-ID badge clipped to it. The page route starts here, bottom left.
 
 import Image from "next/image";
-import { ArrowRight, Download, Terminal } from "lucide-react";
-import LiveSystemLog from "./LiveSystemLog";
-import RobotRoute from "./ui/RobotRoute";
+import FloorPlan from "./FloorPlan";
 import { profile } from "@/lib/data";
 
 export default function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden">
-      {/* Dot grid, faded out toward the text column */}
-      <div
-        aria-hidden
-        className="absolute inset-0 dot-grid pointer-events-none [mask-image:linear-gradient(to_left,black_15%,transparent_65%)]"
-      />
+    <section
+      id="top"
+      aria-label="Introduction"
+      style={{ "--route": "var(--color-route-blue)" } as React.CSSProperties}
+    >
+      <div className="relative max-w-[1280px] mx-auto px-4 md:px-8 lg:pl-[112px] pt-12 md:pt-20 pb-20 md:pb-28">
+        {/* Start of the page route */}
+        <div aria-hidden className="hidden lg:block absolute left-[45px] top-[62%] bottom-0 w-[6px] bg-corridor" />
+        <span
+          aria-hidden
+          className="hidden lg:block absolute left-[36px] top-[62%] -mt-3 w-6 h-6 rounded-full border-[6px] border-corridor bg-floor"
+        />
 
-      <div className="relative max-w-6xl mx-auto px-4 md:px-8 pt-16 md:pt-24 pb-16 md:pb-24">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 lg:gap-16 items-center">
-          <div className="md:col-span-7 animate-rise">
-            <div className="flex flex-wrap items-center gap-4">
-              <p className="label-mono text-muted">Portfolio · 2026</p>
-              <p className="inline-flex items-center gap-2 rounded-full border border-live/40 px-3 py-1 label-mono text-live">
-                <span aria-hidden className="relative flex w-2 h-2">
-                  <span className="absolute inline-flex w-full h-full rounded-full bg-live/60 animate-ping" />
-                  <span className="relative inline-flex w-2 h-2 rounded-full bg-live" />
-                </span>
-                Open to work
-              </p>
-            </div>
-
-            <h1 className="mt-6 text-hero font-bold text-fg">
-              Johannes Cortez
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
+          <div className="lg:col-span-6">
+            <h1 className="text-hero font-extrabold text-ink text-balance">
+              I build the agents that keep robots moving.
             </h1>
-
-            <p className="mt-4 text-xl md:text-2xl font-medium text-fg-2">
-              AI Automation Specialist · Robotics Fleet Ops
-            </p>
-
-            <p className="mt-6 text-body text-muted max-w-xl">
-              I build AI agents and automations that replace manual work,
-              inside a live, safety-critical robotics operation. Open to AI
-              automation and AI agent roles.
-            </p>
-
-            <div className="mt-8 flex flex-wrap gap-3">
+            <p className="mt-6 max-w-[34ch] text-xl text-ink-2">{profile.headline}</p>
+            <div className="mt-10 flex flex-col sm:flex-row gap-3">
               <a
                 href="#agents"
-                className="group inline-flex items-center gap-2 min-h-12 px-6 rounded-card bg-signal text-ink font-bold transition-colors duration-150 hover:bg-signal/90"
+                className="inline-flex items-center justify-center min-h-12 px-6 rounded-md bg-route-blue text-white font-bold transition-colors duration-150 hover:bg-ink"
               >
-                View work
-                <ArrowRight
-                  className="w-4 h-4 transition-transform duration-150 group-hover:translate-x-0.5"
-                  strokeWidth={1.75}
-                  aria-hidden
-                />
+                See my work
               </a>
               <a
                 href={profile.links.resume}
-                className="inline-flex items-center gap-2 min-h-12 px-6 rounded-card border border-line text-fg font-medium transition-colors duration-150 hover:border-signal/40"
+                download
+                className="inline-flex items-center justify-center min-h-12 px-6 rounded-md border-2 border-ink text-ink font-bold transition-colors duration-150 hover:bg-ink hover:text-floor"
               >
-                <Download className="w-4 h-4" strokeWidth={1.75} aria-hidden />
-                Resume
-              </a>
-              <a
-                href="#demo"
-                className="inline-flex items-center gap-2 min-h-12 px-6 rounded-card border border-line text-fg font-medium transition-colors duration-150 hover:border-signal/40"
-              >
-                <Terminal className="w-4 h-4" strokeWidth={1.75} aria-hidden />
-                Live demo
+                Download resume
               </a>
             </div>
           </div>
 
-          <figure className="md:col-span-5 w-full max-w-sm md:max-w-none animate-rise">
-            <div className="relative aspect-[4/5] rounded-card border border-line bg-surface overflow-hidden">
-              <Image
-                src="/jc-portrait.png"
-                alt={`Portrait of ${profile.name}`}
-                fill
-                priority
-                sizes="(min-width: 768px) 40vw, 384px"
-                className="object-cover object-bottom"
-              />
-            </div>
-            <figcaption className="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 label-mono text-muted">
-              <span className="text-fg-2 whitespace-nowrap">{profile.shortName}</span>
-              <span className="whitespace-nowrap">Quezon City, PH</span>
-            </figcaption>
-          </figure>
-        </div>
-
-        <RobotRoute className="mt-12 md:mt-16" />
-
-        <div className="mt-8">
-          <LiveSystemLog />
+          <div className="lg:col-span-6 relative">
+            <FloorPlan />
+            <IdBadge />
+          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+// Staff ID badge: clipped onto the plan on large screens, inline below it
+// on small ones.
+function IdBadge() {
+  return (
+    <div className="mt-8 lg:mt-0 lg:absolute lg:-bottom-20 lg:-left-10 w-full max-w-[320px] bg-wall border border-rule rounded-lg shadow-[0_2px_0_var(--color-rule)]">
+      <span aria-hidden className="block mx-auto mt-2 w-12 h-2 rounded-full bg-floor border border-rule" />
+      <span aria-hidden className="block mt-2 h-2 bg-route-blue" />
+      <div className="flex gap-4 p-4">
+        <div className="relative shrink-0 w-[84px] h-[104px] rounded-sm overflow-hidden bg-floor border border-rule">
+          <Image
+            src="/jc-portrait.png"
+            alt={`Photo of ${profile.name}`}
+            fill
+            sizes="84px"
+            className="object-cover object-top"
+          />
+        </div>
+        <div className="min-w-0">
+          <p className="font-display font-extrabold text-xl leading-tight text-ink">
+            {profile.shortName}
+          </p>
+          <p className="mt-1 text-[15px] leading-snug text-ink-2">{profile.role}</p>
+          <p className="mt-2 text-[15px] leading-snug text-ink">
+            Open to AI automation and AI agent roles
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }

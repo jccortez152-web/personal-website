@@ -4,7 +4,10 @@ export const profile = {
   name: "Johannes Christopher O. Cortez",
   shortName: "Johannes Cortez",
   initials: "JC",
-  role: "AI Automation Specialist · Robotics Fleet Ops",
+  role: "Robot Care Specialist, AI and Automation",
+  // Hero subline and OG title.
+  headline:
+    "Robot Care Specialist building AI automation at Relay Robotics, supporting delivery robots in hospitals and hotels.",
   location: "New Manila, Quezon City, Philippines",
   email: "jccortez152@gmail.com",
   links: {
@@ -16,48 +19,51 @@ export const profile = {
 
 export const education = {
   degree: "Bachelor of Science in Computer Engineering",
-  school: "University of the East — Manila",
-  period: "2018 — 2023",
+  school: "University of the East, Manila",
+  period: "2018 to 2023",
 };
 
+// Four groups, plain lists. Items that used to be joined with "·" are split;
+// duplicates (Claude Code, Make.com) appear once.
 export const skills: { group: string; items: string[] }[] = [
   {
-    group: "AI & Agents",
+    group: "AI and automation",
     items: [
       "Claude API",
       "Claude Code",
       "Claude Skills",
       "MCP",
       "RAG",
-      "AI Agents",
-      "Prompt Engineering",
+      "AI agents",
+      "Prompt engineering",
       "OpenAI API",
+      "Cursor",
+      "n8n and Make.com workflow automation",
+      "Slack Bolt integrations",
+      "Email and form automation",
+      "Next.js and Supabase",
+      "Bash and Python tooling",
     ],
   },
   {
-    group: "Robotics & Diagnostics",
+    group: "Robotics and Linux",
     items: [
-      "Advanced robot diagnostics (Linux · ROS)",
+      "Advanced robot diagnostics (Linux, ROS)",
       "rosbag analysis",
       "Nav stack triage",
-      "Sensor + elevator interaction triage",
-      "Fleet monitoring & telemetry",
-      "Embedded systems · IoT",
-    ],
-  },
-  {
-    group: "Networking & Linux",
-    items: [
+      "Sensor and elevator interaction triage",
+      "Fleet monitoring and telemetry",
+      "Embedded systems and IoT",
       "Linux logs (journald, syslog)",
-      "tcpdump / Wireshark",
-      "DHCP / DNS triage",
+      "tcpdump and Wireshark",
+      "DHCP and DNS triage",
       "VPN troubleshooting",
       "Wi-Fi roaming RCA",
       "Network security fundamentals",
     ],
   },
   {
-    group: "Identity & Endpoint",
+    group: "Identity and endpoint",
     items: [
       "Microsoft Entra ID",
       "Intune",
@@ -69,27 +75,19 @@ export const skills: { group: string; items: string[] }[] = [
     ],
   },
   {
-    group: "Tools & Platforms",
+    group: "Tools and platforms",
     items: [
       "Linux (Ubuntu, Debian)",
-      "Grafana / Loki",
-      "ServiceNow · Monday.com",
-      "Make.com · Salesforce",
-      "Slack · Microsoft Teams",
+      "Grafana and Loki",
+      "ServiceNow",
+      "Monday.com",
+      "Salesforce",
+      "Slack",
+      "Microsoft Teams",
       "Confluence",
-      "Git · GitHub",
-      "Microsoft 365 · Google Suite",
-    ],
-  },
-  {
-    group: "Automation · Internal Tools",
-    items: [
-      "Cursor · Claude Code",
-      "Make.com · n8n (workflow automation)",
-      "Slack Bolt integrations",
-      "Email + form automation",
-      "Next.js · Supabase shipping stack",
-      "Bash · Python tooling",
+      "Git and GitHub",
+      "Microsoft 365",
+      "Google Workspace",
     ],
   },
 ];
@@ -98,7 +96,7 @@ export const experience = [
   {
     company: "Relay Robotics",
     role: "Robot Care Specialist | AI & Automation",
-    period: "2024 — Present",
+    period: "2024 to present",
     bullets: [
       "Provide remote technical support for a global fleet of autonomous delivery robots in hospitals and hotels, diagnosing live faults across navigation, connectivity, sensors, docking, and elevator and door integrations using SSH, Linux logs, Grafana/Loki, and rosbag analysis.",
       "Remotely support field technicians during robot installs, hardware swaps, and site commissioning.",
@@ -111,7 +109,7 @@ export const experience = [
   {
     company: "DXC Technology",
     role: "Technical Solutions Representative III — Microsoft Global Helpdesk (Managed Services)",
-    period: "2023 — 2024",
+    period: "2023 to 2024",
     bullets: [
       "Delivered managed service support for Microsoft's global workforce under client SLAs.",
       "Resolved Entra ID identity issues: lockouts, password resets, MFA, and sign-in failures.",
@@ -133,16 +131,17 @@ export const experience = [
   },
 ];
 
-// AI agents and automations. Rendered before the web-app projects, with the
-// same ProjectCard; no case-study modal, so no problem/solution fields.
+// AI agents and automations. `featured` items render as large alternating rows;
+// the rest as a compact list. No case-study modal, so no problem/solution.
 // `video` is the base name of public/videos/<name>.mp4 (+ posters/<name>.jpg);
-// the card only shows a player if that file exists at build time.
+// an item only shows a player if that file exists at build time.
 export type Agent = {
   id: string;
   name: string;
   stack?: string[];
   summary: string;
   result?: string;
+  featured?: boolean;
   video?: string;
 };
 
@@ -154,6 +153,7 @@ export const agents: Agent[] = [
     summary:
       "Watches a robot's live logs during deliveries and flags anomalies with context. Uses a credential-separation design so the agent never holds robot credentials.",
     result: "Approved by engineering for production robots.",
+    featured: true,
     video: "live-fleet-monitoring-agent",
   },
   {
@@ -172,6 +172,7 @@ export const agents: Agent[] = [
       "Detects genuine customer replies that Salesforce missed and routes them to Slack.",
     result:
       "Missed replies reach Slack in real time, plus flags for cases idle 48+ hours or that appear deleted.",
+    featured: true,
     video: "ops-automation-suite",
   },
   {
@@ -188,6 +189,8 @@ export const agents: Agent[] = [
     stack: ["Claude Skills", "Atlassian Rovo MCP", "Confluence", "Slack MCP"],
     summary:
       "One Claude skill holding our full diagnostic playbook, elevator SOPs and KB authoring via Confluence MCP.",
+    result: "Lets frontline specialists handle escalation-level work.",
+    featured: true,
     video: "robocare-specialist-skill",
   },
   {

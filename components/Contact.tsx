@@ -1,83 +1,55 @@
-// Contact — heading and intro on the left, the three channels as full-width
-// link rows on the right.
+// Contact — the end of the route: a destination sign with email and links.
 
-import { ArrowUpRight } from "lucide-react";
 import { profile } from "@/lib/data";
-import SectionHeader from "./ui/SectionHeader";
 
 export default function Contact() {
   return (
-    <section id="contact" className="px-4 md:px-8 py-24 md:py-32 border-t border-line">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-          <div className="lg:col-span-6">
-            <SectionHeader
-              index="08"
-              label="Contact"
-              title="Let's talk."
-              sub="Open to AI automation, AI agent, and technical solutions roles. Remote-friendly across time zones."
-            />
-          </div>
+    <section
+      id="contact"
+      aria-labelledby="contact-title"
+      style={{ "--route": "var(--color-sign-fg)" } as React.CSSProperties}
+    >
+      <div className="relative max-w-[1280px] mx-auto px-4 md:px-8 lg:pl-[112px] pt-8 pb-20 md:pb-32">
+        {/* Last stretch of the route, ending at the sign */}
+        <div aria-hidden className="hidden lg:block absolute left-[45px] top-0 h-[88px] w-[6px] bg-corridor" />
+        <span
+          aria-hidden
+          className="hidden lg:block absolute left-[33px] top-[76px] w-[30px] h-[30px] rounded-full bg-ink"
+        />
 
-          <div className="lg:col-span-6 flex flex-col justify-end">
-            <ul className="border-t border-line">
-              <ContactRow
-                href={`mailto:${profile.email}`}
-                label="Email"
-                value={profile.email}
-              />
-              <ContactRow
-                href={profile.links.linkedin}
-                label="LinkedIn"
-                value="/in/johannesongcortez"
-                external
-              />
-              <ContactRow
-                href={profile.links.github}
-                label="GitHub"
-                value="@jccortez152-web"
-                external
-              />
-            </ul>
-          </div>
+        <div className="bg-sign text-sign-fg rounded-lg p-8 md:p-14">
+          <p className="flex items-center gap-3 text-lg font-bold">
+            <span aria-hidden className="w-4 h-4 rounded-full bg-sign-fg" />
+            You&apos;ve arrived
+          </p>
+          <h2 id="contact-title" className="mt-6 text-title font-extrabold">
+            Let&apos;s talk.
+          </h2>
+          <p className="mt-4 max-w-[52ch] text-xl text-sign-fg-2">
+            Open to AI automation, AI agent, and technical solutions roles. Remote-friendly across
+            time zones.
+          </p>
+
+          <a
+            href={`mailto:${profile.email}`}
+            className="link mt-10 inline-block font-display font-extrabold text-[clamp(1.5rem,1rem+2.4vw,2.75rem)] break-all"
+          >
+            {profile.email}
+          </a>
+          <ul className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-xl font-bold">
+            <li>
+              <a href={profile.links.linkedin} target="_blank" rel="noopener noreferrer" className="link inline-flex items-center min-h-11">
+                LinkedIn<span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            </li>
+            <li>
+              <a href={profile.links.github} target="_blank" rel="noopener noreferrer" className="link inline-flex items-center min-h-11">
+                GitHub<span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
     </section>
-  );
-}
-
-function ContactRow({
-  href,
-  label,
-  value,
-  external,
-}: {
-  href: string;
-  label: string;
-  value: string;
-  external?: boolean;
-}) {
-  return (
-    <li className="border-b border-line">
-      <a
-        href={href}
-        target={external ? "_blank" : undefined}
-        rel={external ? "noopener noreferrer" : undefined}
-        className="group flex items-center justify-between gap-6 min-h-16 py-4"
-      >
-        <span className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-6 min-w-0">
-          <span className="label-mono text-muted sm:w-20 shrink-0">{label}</span>
-          <span className="text-lg md:text-xl font-medium text-fg group-hover:text-signal transition-colors duration-150 break-all">
-            {value}
-          </span>
-        </span>
-        <ArrowUpRight
-          className="w-4 h-4 text-muted group-hover:text-signal transition-colors duration-150 shrink-0"
-          strokeWidth={1.75}
-          aria-hidden
-        />
-        {external && <span className="sr-only">(opens in a new tab)</span>}
-      </a>
-    </li>
   );
 }

@@ -1,30 +1,36 @@
-// Open Graph card, auto-wired as og:image and twitter:image. Fleet Console
-// theme: ink background, dot grid, Space Grotesk name, amber route accent.
-// Fonts are static WOFF files in ./og-fonts (next/font can't feed ImageResponse).
+// Open Graph card, auto-wired as og:image and twitter:image. Wayfinding
+// theme: floor background, a route line through the three route colors ending
+// at a destination, name and title in Overpass. Fonts are static WOFF files in
+// ./og-fonts (next/font can't feed ImageResponse).
 
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 export const alt =
-  "Johannes Cortez — AI Automation Specialist · Robotics Fleet Ops";
+  "Johannes Cortez, Robot Care Specialist building AI automation at Relay Robotics";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const ink = "#0E1A24";
-const fg = "#EAF0F3";
-const fg2 = "#B4C3CD";
-const muted = "#9FB2BF";
-const signal = "#F2A93B";
-const live = "#4FB286";
+const floor = "#EEF1EC";
+const wall = "#FFFFFF";
+const ink = "#14262B";
+const ink2 = "#3E5056";
+const blue = "#2457C5";
+const green = "#1E8A5A";
+const yellow = "#E5B21A";
 
 export default async function OG() {
   const dir = join(process.cwd(), "app", "og-fonts");
-  const [grotesk500, grotesk700, mono500] = await Promise.all([
-    readFile(join(dir, "space-grotesk-latin-500-normal.woff")),
-    readFile(join(dir, "space-grotesk-latin-700-normal.woff")),
-    readFile(join(dir, "jetbrains-mono-latin-500-normal.woff")),
+  const [overpass800, atkinson400, atkinson700] = await Promise.all([
+    readFile(join(dir, "overpass-latin-800-normal.woff")),
+    readFile(join(dir, "atkinson-hyperlegible-latin-400-normal.woff")),
+    readFile(join(dir, "atkinson-hyperlegible-latin-700-normal.woff")),
   ]);
+
+  const bar = (color: string, width: number) => (
+    <div style={{ display: "flex", width, height: 14, background: color }} />
+  );
 
   return new ImageResponse(
     (
@@ -34,39 +40,19 @@ export default async function OG() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          background: ink,
-          padding: "72px 80px",
-          color: fg,
-          fontFamily: "Space Grotesk",
-          position: "relative",
+          background: floor,
+          padding: "80px 88px",
+          color: ink,
+          fontFamily: "Atkinson",
         }}
       >
-        {/* Dot grid */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: "flex",
-            backgroundImage:
-              "radial-gradient(circle at 1px 1px, rgba(234,240,243,0.08) 1px, transparent 1.5px)",
-            backgroundSize: "28px 28px",
-          }}
-        />
-
-        <div
-          style={{
-            display: "flex",
-            fontFamily: "JetBrains Mono",
-            fontSize: 20,
-            letterSpacing: "0.15em",
-            textTransform: "uppercase",
-            color: signal,
-          }}
-        >
-          § Portfolio · 2026
+        <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 28, fontWeight: 700 }}>
+          <div style={{ display: "flex", width: 22, height: 22, background: blue }} />
+          AI agents
+          <div style={{ display: "flex", width: 22, height: 22, background: green, marginLeft: 18 }} />
+          Apps
+          <div style={{ display: "flex", width: 22, height: 22, background: yellow, marginLeft: 18 }} />
+          Experience
         </div>
 
         <div style={{ flex: 1, display: "flex" }} />
@@ -74,98 +60,44 @@ export default async function OG() {
         <div
           style={{
             display: "flex",
+            fontFamily: "Overpass",
             fontSize: 112,
-            fontWeight: 700,
+            fontWeight: 800,
             letterSpacing: "-0.03em",
             lineHeight: 1,
           }}
         >
           Johannes Cortez
         </div>
-        <div
-          style={{
-            display: "flex",
-            marginTop: 28,
-            fontSize: 40,
-            fontWeight: 500,
-            color: fg2,
-          }}
-        >
-          AI Automation Specialist · Robotics Fleet Ops
+        <div style={{ display: "flex", marginTop: 24, fontSize: 36, color: ink2, maxWidth: 940 }}>
+          Robot Care Specialist building AI automation at Relay Robotics
         </div>
 
-        {/* Dotted amber route */}
-        <div style={{ display: "flex", alignItems: "center", marginTop: 48 }}>
+        {/* Floor route ending at a destination */}
+        <div style={{ display: "flex", alignItems: "center", marginTop: 56 }}>
+          {bar(blue, 300)}
+          {bar(green, 300)}
+          {bar(yellow, 300)}
           <div
             style={{
-              width: 14,
-              height: 14,
-              borderRadius: 999,
-              border: `2px solid ${signal}`,
               display: "flex",
+              width: 40,
+              height: 40,
+              borderRadius: 999,
+              background: wall,
+              border: `10px solid ${ink}`,
+              marginLeft: -4,
             }}
           />
-          <div style={{ display: "flex", gap: 8, marginLeft: 10, marginRight: 10 }}>
-            {Array.from({ length: 56 }, (_, i) => (
-              <div
-                key={i}
-                style={{
-                  width: 4,
-                  height: 4,
-                  borderRadius: 999,
-                  background: signal,
-                  display: "flex",
-                }}
-              />
-            ))}
-          </div>
-          <div
-            style={{
-              width: 16,
-              height: 16,
-              borderRadius: 999,
-              background: signal,
-              display: "flex",
-            }}
-          />
-        </div>
-
-        <div style={{ flex: 1, display: "flex" }} />
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            fontFamily: "JetBrains Mono",
-            fontSize: 20,
-            letterSpacing: "0.15em",
-            textTransform: "uppercase",
-            color: muted,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div
-              style={{
-                width: 12,
-                height: 12,
-                borderRadius: 999,
-                background: live,
-                display: "flex",
-              }}
-            />
-            <span style={{ color: live }}>Open to work</span>
-          </div>
-          <span>github.com/jccortez152-web</span>
         </div>
       </div>
     ),
     {
       ...size,
       fonts: [
-        { name: "Space Grotesk", data: grotesk500, weight: 500, style: "normal" },
-        { name: "Space Grotesk", data: grotesk700, weight: 700, style: "normal" },
-        { name: "JetBrains Mono", data: mono500, weight: 500, style: "normal" },
+        { name: "Overpass", data: overpass800, weight: 800, style: "normal" },
+        { name: "Atkinson", data: atkinson400, weight: 400, style: "normal" },
+        { name: "Atkinson", data: atkinson700, weight: 700, style: "normal" },
       ],
     },
   );

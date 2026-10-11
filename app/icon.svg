@@ -1,16 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- ink rounded square with a thin border so it reads on light tabs -->
-  <rect width="64" height="64" rx="14" fill="#0E1A24"/>
-  <rect x="0.5" y="0.5" width="63" height="63" rx="13.5"
-        fill="none" stroke="#EAF0F3" stroke-opacity="0.12" stroke-width="1"/>
-  <!-- "jc" in signal amber -->
-  <text x="32" y="43"
-        text-anchor="middle"
-        font-family="'Space Grotesk', 'Segoe UI', Arial, sans-serif"
-        font-weight="700"
-        font-size="32"
-        letter-spacing="-1"
-        fill="#F2A93B">jc</text>
-  <!-- dock waypoint -->
-  <circle cx="50" cy="50" r="3" fill="#F2A93B"/>
+  <!-- pale floor tile with an L-shaped blue route ending at a destination -->
+  <rect width="64" height="64" rx="12" fill="#EEF1EC"/>
+  <rect x="0.5" y="0.5" width="63" height="63" rx="11.5" fill="none" stroke="#14262B" stroke-opacity="0.2"/>
+  <path d="M16 12 V40 H44" fill="none" stroke="#2457C5" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="46" cy="40" r="9" fill="#FFFFFF" stroke="#14262B" stroke-width="5"/>
 </svg>

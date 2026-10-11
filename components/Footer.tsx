@@ -1,23 +1,22 @@
-// Colophon footer.
+// Footer — quiet colophon.
 
 import { profile } from "@/lib/data";
 
 export default function Footer() {
   return (
-    <footer className="px-4 md:px-8 py-12 border-t border-line">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-muted">
-        <div>
-          <span className="text-fg font-medium">{profile.name}</span>
+    <footer className="border-t border-rule">
+      <div className="max-w-[1280px] mx-auto px-4 md:px-8 lg:pl-[112px] py-10 grid grid-cols-1 md:grid-cols-3 gap-4 text-[15px] text-ink-2">
+        <p>
+          <span className="font-bold text-ink">{profile.name}</span>
           <br />
           {profile.location}
-        </div>
-        <div>
-          Set in <span className="text-fg-2">Space Grotesk</span> &{" "}
-          <span className="text-fg-2 font-mono">JetBrains Mono</span>.
+        </p>
+        <p>
+          Set in Overpass and Atkinson Hyperlegible.
           <br />
-          Built with Next.js · Tailwind · Claude Code.
-        </div>
-        <div className="md:text-right">© {new Date().getFullYear()}</div>
+          Built with Next.js, Tailwind and Claude Code.
+        </p>
+        <p className="md:text-right">© {new Date().getFullYear()}</p>
       </div>
     </footer>
   );

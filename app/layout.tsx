@@ -1,21 +1,20 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Atkinson_Hyperlegible, Overpass } from "next/font/google";
 import "./globals.css";
-import MotionProvider from "@/components/ui/MotionProvider";
 
-// Display + body.
-const spaceGrotesk = Space_Grotesk({
+// Display: signage-style, like highway and hospital wayfinding.
+const overpass = Overpass({
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-space-grotesk",
+  weight: ["700", "800"],
+  variable: "--font-overpass",
   display: "swap",
 });
 
-// Labels, section numbers, tags, code, metadata.
-const jetbrainsMono = JetBrains_Mono({
+// Body: designed for legibility.
+const atkinson = Atkinson_Hyperlegible({
   subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-jetbrains-mono",
+  weight: ["400", "700"],
+  variable: "--font-atkinson",
   display: "swap",
 });
 
@@ -68,11 +67,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
+      className={`${overpass.variable} ${atkinson.variable}`}
     >
-      <body>
-        <MotionProvider>{children}</MotionProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

@@ -1,111 +1,172 @@
 @import "tailwindcss";
 
-/* Fleet Console design tokens. Tailwind v4 turns each --color-* into a
-   utility (bg-ink, text-fg-2, border-line, text-signal, ...). Components use
-   these only — no hardcoded colors. */
+/* Wayfinding design tokens. The page is a hospital floor: pale vinyl floor,
+   white walls, ink text, and three colored floor routes — blue (AI agents),
+   green (apps), yellow (experience). Components use these utilities only
+   (bg-floor, text-ink, border-rule, bg-route-blue, text-route-blue-text...). */
 @theme {
-  --color-ink: #0e1a24;
-  --color-surface: #13222e;
-  --color-line: rgb(234 240 243 / 0.12);
-  --color-fg: #eaf0f3;
-  --color-fg-2: #b4c3cd;
-  --color-muted: #9fb2bf;
-  --color-signal: #f2a93b;
-  --color-live: #4fb286;
+  --color-floor: #eef1ec;
+  --color-wall: #ffffff;
+  --color-ink: #14262b;
+  --color-ink-2: #3e5056;
+  --color-rule: rgb(20 38 43 / 0.14);
+  --color-corridor: #a9b3b0;
 
-  --radius-card: 10px;
+  --color-route-blue: #2457c5;
+  --color-route-green: #1e8a5a;
+  --color-route-yellow: #e5b21a;
+  /* Text-safe variants: green #1e8a5a is only 3.8:1 on floor, so green text
+     uses a darker shade. Yellow is never used for text. */
+  --color-route-blue-text: #2457c5;
+  --color-route-green-text: #17704a;
+  /* Fixed in both themes: fill behind white text (6.1:1). */
+  --color-route-green-deep: #17704a;
 
-  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
+  /* The nav and the destination sign stay dark in both themes. */
+  --color-sign: #14262b;
+  --color-sign-fg: #ffffff;
+  --color-sign-fg-2: #c9d3d1;
 
-  /* Type scale */
-  --text-hero: clamp(2.5rem, 1.4rem + 4.6vw, 4.5rem);
-  --text-hero--line-height: 1.02;
+  --font-display: var(--font-overpass), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
+
+  --text-hero: clamp(2.75rem, 1.2rem + 5.4vw, 6rem);
+  --text-hero--line-height: 0.98;
   --text-hero--letter-spacing: -0.03em;
-  --text-h2: clamp(2rem, 1.6rem + 1.4vw, 2.5rem);
-  --text-h2--line-height: 1.1;
-  --text-h2--letter-spacing: -0.02em;
-  --text-body: clamp(1.0625rem, 1rem + 0.25vw, 1.125rem);
+  --text-title: clamp(2.25rem, 1.6rem + 2.2vw, 3.5rem);
+  --text-title--line-height: 1.05;
+  --text-title--letter-spacing: -0.02em;
+  --text-body: 1.125rem;
   --text-body--line-height: 1.6;
-  --text-label: 0.8125rem;
-  --text-label--line-height: 1.4;
-  --text-label--letter-spacing: 0.15em;
+}
+
+/* Dark mode: floor and ink swap, route colors stay. Blue/green text get
+   lighter tints so they keep 4.5:1 on the dark floor. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-floor: #14262b;
+    --color-wall: #1c3238;
+    --color-ink: #eef1ec;
+    --color-ink-2: #b9c6c4;
+    --color-rule: rgb(238 241 236 / 0.18);
+    --color-corridor: #4d6066;
+    --color-route-blue-text: #8daef2;
+    --color-route-green-text: #6cc79c;
+    --color-sign: #0c181b;
+  }
 }
 
 html {
   scroll-behavior: smooth;
-  background: var(--color-ink);
+  background: var(--color-floor);
+  color-scheme: light dark;
 }
 
 body {
-  background: var(--color-ink);
-  color: var(--color-fg);
+  background: var(--color-floor);
+  color: var(--color-ink);
   font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
 }
 
-/* Anchor jumps land below the sticky nav. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+}
+
+/* Anchor jumps land below the sticky sign. */
 section[id] {
-  scroll-margin-top: 72px;
+  scroll-margin-top: 64px;
 }
 
 ::selection {
-  background: var(--color-signal);
-  color: var(--color-ink);
+  background: var(--color-route-blue);
+  color: #ffffff;
 }
 
-/* Visible amber focus ring on every interactive element. */
+/* Two-tone focus: an ink ring (guaranteed contrast) wrapped in the current
+   section's route color. Sections set --route. */
 :focus-visible {
-  outline: 2px solid var(--color-signal);
-  outline-offset: 3px;
+  outline: 3px solid var(--route, var(--color-route-blue));
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--color-ink);
   border-radius: 4px;
 }
 
-/* Mono label: section numbers, metadata, tags. */
-@utility label-mono {
-  font-family: var(--font-mono);
-  font-size: var(--text-label);
-  line-height: var(--text-label--line-height);
-  letter-spacing: var(--text-label--letter-spacing);
-  text-transform: uppercase;
-}
-
-/* Dot grid — hero and section headers only, never behind body copy. */
-@utility dot-grid {
-  background-image: radial-gradient(
-    circle at 1px 1px,
-    rgb(234 240 243 / 0.08) 1px,
-    transparent 1.5px
-  );
-  background-size: 28px 28px;
-}
-
-/* Card hover: amber border at ~40% and a 2px lift. */
-@utility card-hover {
-  transition:
-    transform 150ms ease-out,
-    border-color 150ms ease-out;
+/* Links: underlined; the underline thickens on hover. */
+@utility link {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: text-decoration-thickness 120ms ease-out;
   &:hover {
-    transform: translateY(-2px);
-    border-color: color-mix(in srgb, var(--color-signal) 40%, transparent);
+    text-decoration-thickness: 3px;
   }
 }
 
-@keyframes rise {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ---------------------------------------------------------------------------
+   Hero floor plan — the only automatic animation on the page. Default styles
+   are the finished state (robot at the destination, route drawn, callouts
+   shown), so reduced-motion users and no-JS renders see the end result.
+   Timeline (6s): hold at elevator, ride the corridor, hold at the fire door,
+   hold near Room 412, arrive at the nurses' station.
+   --------------------------------------------------------------------------- */
+.fp-robot {
+  transform: translate(410px, 372px);
 }
-@utility animate-rise {
-  animation: rise 280ms ease-out both;
+.fp-route {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
 }
 
-@keyframes caret-blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .fp-robot {
+    animation: fp-robot 6s linear both;
+  }
+  .fp-route {
+    animation: fp-route 6s linear both;
+  }
+  .fp-note {
+    animation: fp-note 150ms ease-out both;
+  }
+  .fp-note-1 { animation-delay: 0.2s; }
+  .fp-note-2 { animation-delay: 3.06s; }
+  .fp-note-3 { animation-delay: 4.51s; }
+  .fp-arrived {
+    animation: fp-note 200ms ease-out 5.9s both;
+  }
 }
-@utility animate-caret {
-  animation: caret-blink 1s step-end infinite;
+
+@keyframes fp-robot {
+  0%    { transform: translate(70px, 150px); }
+  10%   { transform: translate(70px, 150px); }
+  21.5% { transform: translate(70px, 240px); }
+  51%   { transform: translate(300px, 240px); }
+  61%   { transform: translate(300px, 240px); }
+  75.2% { transform: translate(410px, 240px); }
+  83.5% { transform: translate(410px, 240px); }
+  100%  { transform: translate(410px, 372px); }
+}
+
+/* pathLength=1, so dashoffset is the unrevealed fraction of the route. */
+@keyframes fp-route {
+  0%    { stroke-dashoffset: 1; }
+  10%   { stroke-dashoffset: 1; }
+  21.5% { stroke-dashoffset: 0.839; }
+  51%   { stroke-dashoffset: 0.429; }
+  61%   { stroke-dashoffset: 0.429; }
+  75.2% { stroke-dashoffset: 0.232; }
+  83.5% { stroke-dashoffset: 0.232; }
+  100%  { stroke-dashoffset: 0; }
+}
+
+@keyframes fp-note {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -115,26 +176,6 @@ section[id] {
   *,
   ::before,
   ::after {
-    animation: none !important;
     transition: none !important;
   }
-  .card-hover:hover {
-    transform: none;
-  }
-  [data-reveal] {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-}
-
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-ink);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-surface);
-  border-radius: 999px;
 }

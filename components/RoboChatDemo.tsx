@@ -11,7 +11,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Bell, Hash, RotateCcw, Send, Slack } from "lucide-react";
-import SectionHeader from "./ui/SectionHeader";
 
 type CustomerMsg = { role: "customer" | "operator"; text: string };
 type SlackEvent =
@@ -119,69 +118,52 @@ export default function RoboChatDemo() {
   };
 
   const empty = customerMsgs.length === 0 && slackEvents.length === 0;
-
   return (
-    <section id="demo" className="px-4 md:px-8 py-24 md:py-32 border-t border-line">
-      <div className="max-w-6xl mx-auto">
-        <SectionHeader
-          index="06"
-          label="Demo"
-          title="Talk to RoboChat."
-          sub="When a hospital nurse hits a wall with a robot, they open the chat link. I see it land in Slack and reply from there. They see my response appear in the bubble. No phone call, no install, no account."
-        >
-          <p className="mt-4 label-mono text-muted">
-            Built with <span className="text-fg-2">Slack Bolt</span> ·{" "}
-            <span className="text-fg-2">Supabase</span> ·{" "}
-            <span className="text-fg-2">SSE</span> ·{" "}
-            <span className="text-fg-2">Next.js</span>
-          </p>
-        </SectionHeader>
+    <div>
+      {/* Two-pane demo */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <CustomerPane msgs={customerMsgs} scrollRef={customerScrollRef} />
+        <SlackPane events={slackEvents} scrollRef={slackScrollRef} />
+      </div>
 
-        {/* Two-pane demo */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <CustomerPane msgs={customerMsgs} scrollRef={customerScrollRef} />
-          <SlackPane events={slackEvents} scrollRef={slackScrollRef} />
-        </div>
-
-        {/* Controls */}
-        <div className="mt-8 flex flex-col gap-4">
-          <p className="label-mono text-muted">Try a customer message</p>
-          <div className="flex flex-wrap gap-2 items-center">
-            {prompts.map((p, idx) => {
-              const used = usedIndices.has(idx);
-              return (
-                <button
-                  type="button"
-                  key={p.customer}
-                  onClick={() => ask(idx)}
-                  disabled={busy || used}
-                  className={`text-left text-[15px] min-h-11 px-4 py-2 border rounded-card transition-colors duration-150 disabled:cursor-not-allowed ${
-                    used
-                      ? "text-muted border-line line-through"
-                      : "text-fg border-line hover:border-signal/40 disabled:opacity-50"
-                  }`}
-                >
-                  {p.customer}
-                </button>
-              );
-            })}
-            <button
-              type="button"
-              onClick={reset}
-              disabled={busy || empty}
-              className="ml-auto inline-flex items-center gap-2 min-h-11 px-3 label-mono text-fg-2 hover:text-fg disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
-            >
-              <RotateCcw className="w-3.5 h-3.5" strokeWidth={1.75} aria-hidden />
-              Reset
-            </button>
-          </div>
+      {/* Controls */}
+      <div className="mt-6">
+        <p className="font-bold">Try a customer message</p>
+        <div className="mt-3 flex flex-wrap gap-2 items-center">
+          {prompts.map((p, idx) => {
+            const used = usedIndices.has(idx);
+            return (
+              <button
+                type="button"
+                key={p.customer}
+                onClick={() => ask(idx)}
+                disabled={busy || used}
+                className={`text-left text-[16px] min-h-11 px-4 py-2 rounded-md border-2 transition-colors duration-150 disabled:cursor-not-allowed ${
+                  used
+                    ? "border-rule text-ink-2 line-through"
+                    : "border-rule bg-wall text-ink hover:border-route-green disabled:opacity-50"
+                }`}
+              >
+                {p.customer}
+              </button>
+            );
+          })}
+          <button
+            type="button"
+            onClick={reset}
+            disabled={busy || empty}
+            className="link ml-auto inline-flex items-center gap-2 min-h-11 px-2 font-bold text-ink disabled:opacity-50 disabled:cursor-not-allowed disabled:no-underline"
+          >
+            <RotateCcw className="w-4 h-4" strokeWidth={2} aria-hidden />
+            Reset
+          </button>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
-// Customer view — the light chat widget a nurse sees on the page.
+// Customer view — the light chat widget a nurse opens from a link.
 function CustomerPane({
   msgs,
   scrollRef,
@@ -190,26 +172,21 @@ function CustomerPane({
   scrollRef: React.RefObject<HTMLDivElement | null>;
 }) {
   return (
-    <div className="rounded-card bg-fg text-ink overflow-hidden flex flex-col h-[440px]">
-      <div className="px-5 py-3 border-b border-ink/10 flex items-center justify-between gap-4">
+    <div className="rounded-lg bg-wall text-ink border border-rule overflow-hidden flex flex-col h-[440px]">
+      <div className="px-5 py-3 border-b border-rule flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <span
             aria-hidden
-            className="w-9 h-9 rounded-full bg-ink text-fg flex items-center justify-center font-mono text-[11px]"
+            className="w-9 h-9 rounded-full bg-route-green-deep text-white flex items-center justify-center text-[13px] font-bold"
           >
             RC
           </span>
           <div>
-            <div className="font-bold text-sm">RoboCare</div>
-            <div className="text-xs text-ink/70 flex items-center gap-2">
-              <span aria-hidden className="w-2 h-2 rounded-full bg-live" />
-              An operator is here · usually replies in minutes
-            </div>
+            <div className="font-bold text-[16px]">RoboCare</div>
+            <div className="text-[14px] text-ink-2">An operator is here and usually replies in minutes</div>
           </div>
         </div>
-        <span className="hidden sm:inline font-mono text-[11px] uppercase tracking-[0.15em] text-ink/70">
-          Customer view
-        </span>
+        <span className="hidden sm:inline text-[14px] text-ink-2">Customer view</span>
       </div>
 
       <div
@@ -217,10 +194,10 @@ function CustomerPane({
         role="log"
         aria-label="Customer chat"
         tabIndex={0}
-        className="flex-1 overflow-y-auto px-5 py-6 space-y-3 scroll-smooth"
+        className="flex-1 overflow-y-auto px-5 py-6 space-y-3 scroll-smooth bg-floor"
       >
         {msgs.length === 0 && (
-          <p className="text-ink/70 text-sm text-center py-12">
+          <p className="text-ink-2 text-[15px] text-center py-12">
             Pick a sample message below to start a chat.
           </p>
         )}
@@ -230,20 +207,20 @@ function CustomerPane({
       </div>
 
       {/* Input (visual only) */}
-      <div className="border-t border-ink/10 px-5 py-3 flex items-center gap-3">
+      <div className="border-t border-rule px-5 py-2 flex items-center gap-3">
         <input
           disabled
           aria-label="Message (disabled in demo)"
           placeholder="Type a message…"
-          className="flex-1 bg-transparent text-sm text-ink placeholder:text-ink/60 outline-none cursor-not-allowed"
+          className="flex-1 bg-transparent text-[15px] text-ink placeholder:text-ink-2 outline-none cursor-not-allowed"
         />
         <button
           type="button"
           disabled
-          className="w-11 h-11 inline-flex items-center justify-center text-ink/50 cursor-not-allowed"
+          className="w-11 h-11 inline-flex items-center justify-center text-ink-2 cursor-not-allowed"
           aria-label="Send (disabled in demo)"
         >
-          <Send className="w-4 h-4" strokeWidth={1.75} aria-hidden />
+          <Send className="w-4 h-4" strokeWidth={2} aria-hidden />
         </button>
       </div>
     </div>
@@ -260,7 +237,7 @@ function CustomerBubble({
   if (role === "customer") {
     return (
       <div className="flex justify-end">
-        <div className="max-w-[85%] bg-ink text-fg px-4 py-2.5 rounded-2xl rounded-br-sm text-sm leading-relaxed">
+        <div className="max-w-[85%] bg-ink text-floor px-4 py-2.5 rounded-2xl rounded-br-sm text-[15px] leading-relaxed">
           {text}
         </div>
       </div>
@@ -270,18 +247,18 @@ function CustomerBubble({
     <div className="flex justify-start gap-2">
       <span
         aria-hidden
-        className="w-7 h-7 rounded-full bg-ink/10 flex items-center justify-center font-mono text-[11px] shrink-0 mt-1"
+        className="w-7 h-7 rounded-full bg-route-green-deep text-white flex items-center justify-center text-[12px] font-bold shrink-0 mt-1"
       >
         JC
       </span>
-      <div className="max-w-[85%] bg-ink/[0.07] px-4 py-2.5 rounded-2xl rounded-bl-sm text-sm leading-relaxed">
+      <div className="max-w-[85%] bg-wall border border-rule px-4 py-2.5 rounded-2xl rounded-bl-sm text-[15px] leading-relaxed">
         {text}
       </div>
     </div>
   );
 }
 
-// Operator view — the Slack channel, styled as a console.
+// Operator view — the Slack channel, on a dark panel like the real app.
 function SlackPane({
   events,
   scrollRef,
@@ -290,39 +267,37 @@ function SlackPane({
   scrollRef: React.RefObject<HTMLDivElement | null>;
 }) {
   return (
-    <div className="rounded-card border border-line bg-ink overflow-hidden flex flex-col h-[440px] font-mono">
-      <div className="px-5 py-3 border-b border-line bg-surface flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2 text-fg text-sm">
-          <Slack className="w-4 h-4 text-fg-2" strokeWidth={1.75} aria-hidden />
-          <Hash className="w-3.5 h-3.5 text-muted" strokeWidth={1.75} aria-hidden />
+    <div className="rounded-lg bg-sign text-sign-fg overflow-hidden flex flex-col h-[440px]">
+      <div className="px-5 py-3 border-b border-sign-fg/15 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2 font-bold text-[16px]">
+          <Slack className="w-4 h-4" strokeWidth={2} aria-hidden />
+          <Hash className="w-4 h-4 text-sign-fg-2" strokeWidth={2} aria-hidden />
           robocare-customer-chat
         </div>
-        <span className="hidden sm:inline text-[11px] uppercase tracking-[0.15em] text-muted">
-          Operator view
-        </span>
+        <span className="hidden sm:inline text-[14px] text-sign-fg-2">Operator view</span>
       </div>
 
       <div
         ref={scrollRef}
         aria-label="Operator Slack channel"
         tabIndex={0}
-        className="flex-1 overflow-y-auto px-5 py-6 space-y-4 scroll-smooth text-[13px]"
+        className="flex-1 overflow-y-auto px-5 py-6 space-y-4 scroll-smooth text-[15px]"
       >
         {events.length === 0 && (
-          <p className="text-muted text-center py-12">
-            $ channel quiet · waiting for incoming chats
+          <p className="text-sign-fg-2 text-center py-12">
+            The channel is quiet, waiting for incoming chats.
           </p>
         )}
         {events.map((e, i) => {
           if (e.kind === "notification") {
             return (
-              <div key={i} className="border-l-2 border-signal pl-3 py-1">
-                <div className="flex items-center gap-2 uppercase tracking-[0.1em] text-signal mb-1">
-                  <Bell className="w-3 h-3" strokeWidth={1.75} aria-hidden />
-                  New chat · {e.site}
+              <div key={i} className="border-l-4 border-route-green pl-3 py-1">
+                <div className="flex items-center gap-2 font-bold mb-1">
+                  <Bell className="w-4 h-4" strokeWidth={2} aria-hidden />
+                  New chat from {e.site}
                 </div>
-                <div className="text-fg-2 leading-relaxed">
-                  <span className="text-fg">{e.nurse}:</span> &ldquo;
+                <div className="text-sign-fg-2 leading-relaxed">
+                  <span className="text-sign-fg">{e.nurse}:</span> &ldquo;
                   {e.preview}&rdquo;
                 </div>
               </div>
@@ -330,17 +305,14 @@ function SlackPane({
           }
           if (e.kind === "typing") {
             return (
-              <div key={i} className="flex items-center gap-3">
+              <div key={i} className="flex items-center gap-3 text-sign-fg-2">
                 <span
                   aria-hidden
-                  className="w-7 h-7 rounded-md bg-surface border border-line flex items-center justify-center text-[11px] text-fg-2 shrink-0"
+                  className="w-7 h-7 rounded-md bg-route-green-deep text-white flex items-center justify-center text-[12px] font-bold shrink-0"
                 >
                   JC
                 </span>
-                <span className="text-muted">
-                  typing
-                  <span className="inline-block w-1.5 h-3 ml-1 align-[-1px] bg-fg-2 animate-caret" />
-                </span>
+                Johannes is typing…
               </div>
             );
           }
@@ -348,27 +320,25 @@ function SlackPane({
             <div key={i} className="flex items-start gap-3">
               <span
                 aria-hidden
-                className="w-7 h-7 rounded-md bg-surface border border-line flex items-center justify-center text-[11px] text-fg-2 shrink-0 mt-0.5"
+                className="w-7 h-7 rounded-md bg-route-green-deep text-white flex items-center justify-center text-[12px] font-bold shrink-0 mt-0.5"
               >
                 JC
               </span>
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-fg">johannes.cortez</span>
-                  <span className="text-muted text-[11px]">just now</span>
+                  <span className="font-bold">Johannes Cortez</span>
+                  <span className="text-sign-fg-2 text-[13px]">just now</span>
                 </div>
-                <div className="font-sans text-fg-2 text-sm leading-relaxed mt-1">
-                  {e.text}
-                </div>
+                <div className="text-sign-fg leading-relaxed mt-1">{e.text}</div>
               </div>
             </div>
           );
         })}
       </div>
 
-      <div className="border-t border-line px-3 py-2 bg-surface">
-        <div className="border border-line rounded-md px-3 py-2 text-xs text-muted">
-          message #robocare-customer-chat
+      <div className="border-t border-sign-fg/15 px-3 py-2">
+        <div className="border border-sign-fg/25 rounded-md px-3 py-2 text-[14px] text-sign-fg-2">
+          Message #robocare-customer-chat
         </div>
       </div>
     </div>
