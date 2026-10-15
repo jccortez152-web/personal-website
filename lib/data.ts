@@ -131,8 +131,10 @@ export const experience = [
   },
 ];
 
-// AI agents and automations. `featured` items render as large alternating rows;
-// the rest as a compact list. No case-study modal, so no problem/solution.
+// AI agents and automations. Each one names the manual task it replaced
+// (`manual`), rendered struck through. `hero` sets the order of the struck
+// tasks in the opening list (lower first).
+// No case-study modal, so no problem/solution.
 // `video` is the base name of public/videos/<name>.mp4 (+ posters/<name>.jpg);
 // an item only shows a player if that file exists at build time.
 export type Agent = {
@@ -141,7 +143,8 @@ export type Agent = {
   stack?: string[];
   summary: string;
   result?: string;
-  featured?: boolean;
+  manual: string;
+  hero?: number;
   video?: string;
 };
 
@@ -149,16 +152,19 @@ export const agents: Agent[] = [
   {
     id: "fleet-monitor",
     name: "Live Fleet-Monitoring Agent",
+    manual: "Watch a robot's logs through every delivery.",
+    hero: 1,
     stack: ["Claude Code", "SSH", "n8n"],
     summary:
       "Watches a robot's live logs during deliveries and flags anomalies with context. Uses a credential-separation design so the agent never holds robot credentials.",
     result: "Approved by engineering for production robots.",
-    featured: true,
     video: "live-fleet-monitoring-agent",
   },
   {
     id: "case-queue",
     name: "Autonomous Case-Queue Agent",
+    manual: "Pick up new cases from the queue.",
+    hero: 5,
     stack: ["Anthropic SDK", "Python"],
     summary:
       "Continuous-loop agent on the Anthropic SDK that picks up new support cases on a timer and backs off when the queue is empty.",
@@ -167,17 +173,19 @@ export const agents: Agent[] = [
   {
     id: "ops-suite",
     name: "Ops Automation Suite",
+    manual: "Check the inbox for replies Salesforce missed.",
+    hero: 2,
     stack: ["n8n", "Gmail", "Slack", "Salesforce"],
     summary:
       "Detects genuine customer replies that Salesforce missed and routes them to Slack.",
     result:
       "Missed replies reach Slack in real time, plus flags for cases idle 48+ hours or that appear deleted.",
-    featured: true,
     video: "ops-automation-suite",
   },
   {
     id: "chrome-slack-monitor",
     name: "Claude in Chrome & Slack Monitoring",
+    manual: "Open the log dashboard and live map every time a delivery starts.",
     stack: ["Claude in Chrome", "Grafana", "Slack"],
     summary:
       "Monitors production robots through the log dashboard and live map the moment a delivery starts, triggered by a Slack alert.",
@@ -186,16 +194,17 @@ export const agents: Agent[] = [
   {
     id: "robocare-skill",
     name: "RoboCare Specialist Skill",
+    manual: "Send the hard cases up the chain.",
     stack: ["Claude Skills", "Atlassian Rovo MCP", "Confluence", "Slack MCP"],
     summary:
       "One Claude skill holding our full diagnostic playbook, elevator SOPs and KB authoring via Confluence MCP.",
     result: "Lets frontline specialists handle escalation-level work.",
-    featured: true,
     video: "robocare-specialist-skill",
   },
   {
     id: "team-dashboard",
     name: "Team Performance Dashboard",
+    manual: "Count each agent's cases against the team average by hand.",
     summary:
       "CSV-upload dashboard showing each agent's case count against the team average, mapped to the scorecard's star bands.",
     video: "team-performance-dashboard",
@@ -203,6 +212,8 @@ export const agents: Agent[] = [
   {
     id: "case-filler",
     name: "Salesforce Case Filler",
+    manual: "Fill every categorization field on every case.",
+    hero: 3,
     stack: ["Claude Skills", "Claude in Chrome", "Salesforce"],
     summary:
       "Reads each case's subject and comments and fills all categorization fields.",
@@ -211,6 +222,8 @@ export const agents: Agent[] = [
   {
     id: "qa-audit",
     name: "QA Case Audit",
+    manual: "Score every case for QA by hand.",
+    hero: 4,
     stack: ["Claude Skills", "Python", "ReportLab"],
     summary:
       "Scores each case's categorization against its comments.",

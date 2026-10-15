@@ -1,5 +1,6 @@
-// About (corridor route) — prose and pull quote, with a plain facts list.
+// About — portrait, two paragraphs, the pull quote, and a plain facts list.
 
+import Image from "next/image";
 import { education, profile } from "@/lib/data";
 import { joinList } from "@/lib/format";
 import Section from "./ui/Section";
@@ -8,21 +9,34 @@ const stack = ["Claude Code", "Claude Skills", "n8n", "Next.js", "Supabase", "Sl
 
 export default function About() {
   return (
-    <Section id="about" route="corridor" title="Hi, I'm Johannes.">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-        <div className="lg:col-span-7 max-w-[68ch] space-y-6">
-          <p>
-            I&apos;m a Robot Care Specialist at Relay Robotics, supporting autonomous delivery
-            robots in hospitals and hotels worldwide. My day is logs, telemetry, live incidents,
-            and remote support for field technicians, plus post-mortems that turn every failure
-            into a fix.
-          </p>
-          <p>
-            When a manual process or blind spot slows the team down, I automate it: AI agents that
-            watch live robot logs, Claude Skills that handle case triage and QA, and n8n workflows
-            that connect Salesforce, Gmail, and Slack.
-          </p>
-          <blockquote className="!mt-12 border-l-[6px] border-ink pl-6 font-display font-extrabold text-[28px] md:text-[34px] leading-tight tracking-tight">
+    <Section id="about" title="Hi, I'm Johannes.">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14">
+        <div className="lg:col-span-7">
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
+            <div className="relative shrink-0 w-[140px] h-[172px] rounded-lg overflow-hidden bg-ceil">
+              <Image
+                src="/jc-portrait.png"
+                alt={`Photo of ${profile.name}`}
+                fill
+                sizes="140px"
+                className="object-cover object-top"
+              />
+            </div>
+            <div className="space-y-5 max-w-[60ch]">
+              <p>
+                I&apos;m a Robot Care Specialist at Relay Robotics, supporting autonomous delivery
+                robots in hospitals and hotels worldwide. My day is logs, telemetry, live
+                incidents, and remote support for field technicians, plus post-mortems that turn
+                every failure into a fix.
+              </p>
+              <p>
+                When a manual process or blind spot slows the team down, I automate it: AI agents
+                that watch live robot logs, Claude Skills that handle case triage and QA, and n8n
+                workflows that connect Salesforce, Gmail, and Slack.
+              </p>
+            </div>
+          </div>
+          <blockquote className="expanded mt-12 font-extrabold text-[28px] md:text-[36px] leading-[1.1] tracking-tight max-w-[22ch]">
             Every manual step is a candidate for an agent.
           </blockquote>
         </div>
@@ -48,8 +62,8 @@ export default function About() {
 function Fact({ k, v }: { k: string; v: string }) {
   return (
     <>
-      <dt className="font-bold text-ink">{k}</dt>
-      <dd className="text-ink-2">{v}</dd>
+      <dt className="font-bold">{k}</dt>
+      <dd className="text-graphite">{v}</dd>
     </>
   );
 }

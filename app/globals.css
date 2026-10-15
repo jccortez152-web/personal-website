@@ -1,69 +1,57 @@
 @import "tailwindcss";
 
-/* Wayfinding design tokens. The page is a hospital floor: pale vinyl floor,
-   white walls, ink text, and three colored floor routes — blue (AI agents),
-   green (apps), yellow (experience). Components use these utilities only
-   (bg-floor, text-ink, border-rule, bg-route-blue, text-route-blue-text...). */
+/* "Struck off" design tokens. Scrub-blue ceil fields bookend the page (hero,
+   contact); everything between sits on cool clinical paper. One family,
+   Archivo, whose width axis carries the personality: condensed for the
+   manual tasks that get struck through, expanded for what replaced them.
+   Components use these utilities only (bg-paper, text-ink, bg-ceil...). */
 @theme {
-  --color-floor: #eef1ec;
-  --color-wall: #ffffff;
-  --color-ink: #14262b;
-  --color-ink-2: #3e5056;
-  --color-rule: rgb(20 38 43 / 0.14);
-  --color-corridor: #a9b3b0;
+  --color-ceil: #8db3d6;
+  --color-paper: #f6f8f9;
+  --color-ink: #16202a;
+  --color-graphite: #4a5561;
+  --color-navy: #1d4a78;
+  --color-rule: rgb(22 32 42 / 0.14);
+  /* Raised UI panes (modals, the RoboChat customer view). */
+  --color-card: #ffffff;
 
-  --color-route-blue: #2457c5;
-  --color-route-green: #1e8a5a;
-  --color-route-yellow: #e5b21a;
-  /* Text-safe variants: green #1e8a5a is only 3.8:1 on floor, so green text
-     uses a darker shade. Yellow is never used for text. */
-  --color-route-blue-text: #2457c5;
-  --color-route-green-text: #17704a;
-  /* Fixed in both themes: fill behind white text (6.1:1). */
-  --color-route-green-deep: #17704a;
+  /* Fixed in both themes. */
+  --color-on-ceil: #16202a; /* text and strike bars on ceil: 7.2:1 */
+  --color-navy-deep: #1d4a78; /* fill behind white text: 8:1 */
+  --color-panel: #16202a; /* dark UI panes (RoboChat operator view) */
+  --color-panel-fg: #ffffff;
+  --color-panel-fg-2: #c3cdd6;
 
-  /* The nav and the destination sign stay dark in both themes. */
-  --color-sign: #14262b;
-  --color-sign-fg: #ffffff;
-  --color-sign-fg-2: #c9d3d1;
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
 
-  --font-display: var(--font-overpass), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
-
-  --text-hero: clamp(2.75rem, 1.2rem + 5.4vw, 6rem);
-  --text-hero--line-height: 0.98;
-  --text-hero--letter-spacing: -0.03em;
+  --text-strike: clamp(2.125rem, 1rem + 3.4vw, 4.25rem);
+  --text-strike--line-height: 1.04;
   --text-title: clamp(2.25rem, 1.6rem + 2.2vw, 3.5rem);
   --text-title--line-height: 1.05;
-  --text-title--letter-spacing: -0.02em;
   --text-body: 1.125rem;
   --text-body--line-height: 1.6;
 }
 
-/* Dark mode: floor and ink swap, route colors stay. Blue/green text get
-   lighter tints so they keep 4.5:1 on the dark floor. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-floor: #14262b;
-    --color-wall: #1c3238;
-    --color-ink: #eef1ec;
-    --color-ink-2: #b9c6c4;
-    --color-rule: rgb(238 241 236 / 0.18);
-    --color-corridor: #4d6066;
-    --color-route-blue-text: #8daef2;
-    --color-route-green-text: #6cc79c;
-    --color-sign: #0c181b;
+    --color-paper: #121a22;
+    --color-ink: #e8eef2;
+    --color-graphite: #aeb9c3;
+    --color-navy: #9dc0e8;
+    --color-rule: rgb(232 238 242 / 0.16);
+    --color-card: #1a2530;
   }
 }
 
 html {
   scroll-behavior: smooth;
-  background: var(--color-floor);
+  scroll-padding-top: 72px;
+  background: var(--color-paper);
   color-scheme: light dark;
 }
 
 body {
-  background: var(--color-floor);
+  background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
   font-size: var(--text-body);
@@ -72,13 +60,14 @@ body {
   overflow-x: clip;
 }
 
-h1,
-h2,
-h3 {
-  font-family: var(--font-display);
+/* Width axis. Weight still follows font-weight. */
+@utility condensed {
+  font-variation-settings: "wdth" 68;
+}
+@utility expanded {
+  font-variation-settings: "wdth" 122;
 }
 
-/* No single orphaned word on short headings and the pull quote. */
 h1,
 h2,
 h3,
@@ -87,35 +76,27 @@ blockquote {
   text-wrap: balance;
 }
 
+::selection {
+  background: var(--color-ceil);
+  color: var(--color-on-ceil);
+}
+
+/* Focus: 3px ring in --focus (navy on paper, ink on ceil fields). */
+:focus-visible {
+  outline: 3px solid var(--focus, var(--color-navy));
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
 /* Tailwind v4 no longer gives buttons a pointer cursor. */
 button:not(:disabled),
 [role="button"]:not([aria-disabled="true"]) {
   cursor: pointer;
 }
 
-/* Pressed feedback on every control: a brief dim, no movement (no layout
-   shift, no lift). */
+/* Pressed feedback on every control: a brief dim, no movement. */
 :where(a[href], button:not(:disabled)):active {
   opacity: 0.8;
-}
-
-/* Anchor jumps land below the sticky sign. */
-section[id] {
-  scroll-margin-top: 64px;
-}
-
-::selection {
-  background: var(--color-route-blue);
-  color: #ffffff;
-}
-
-/* Two-tone focus: an ink ring (guaranteed contrast) wrapped in the current
-   section's route color. Sections set --route. */
-:focus-visible {
-  outline: 3px solid var(--route, var(--color-route-blue));
-  outline-offset: 2px;
-  box-shadow: 0 0 0 2px var(--color-ink);
-  border-radius: 4px;
 }
 
 /* Links: underlined; the underline thickens on hover. */
@@ -130,63 +111,29 @@ section[id] {
 }
 
 /* ---------------------------------------------------------------------------
-   Hero floor plan — the only automatic animation on the page. Default styles
-   are the finished state (robot at the destination, route drawn, callouts
-   shown), so reduced-motion users and no-JS renders see the end result.
-   Timeline (4.8s, under WCAG's 5-second limit for auto-playing motion
-   without a pause control): hold at elevator, ride the corridor, hold at the
-   fire door, hold near Room 412, arrive at the nurses' station. Note delays
-   are the keyframe percentages below times 4.8s.
+   The strike: an ink bar drawn through a manual task. It's a background on an
+   inline element, so it follows the text across wrapped lines. Default is
+   fully struck (reduced motion, no-JS). With motion allowed, the hero strikes
+   draw once on load in sequence (--i = line index): the only automatic
+   animation on the page, ~1.5s total.
    --------------------------------------------------------------------------- */
-.fp-robot {
-  transform: translate(410px, 372px);
-}
-.fp-route {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 0;
+.strike {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 60%;
+  background-size: 100% 0.07em;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .fp-robot {
-    animation: fp-robot 4.8s linear both;
+  .strike-draw {
+    animation: strike-draw 320ms cubic-bezier(0.3, 0, 0.2, 1) both;
+    animation-delay: calc(200ms + var(--i, 0) * 260ms);
   }
-  .fp-route {
-    animation: fp-route 4.8s linear both;
-  }
-  .fp-note {
-    animation: fp-note 150ms ease-out both;
-  }
-  .fp-note-1 { animation-delay: 0.16s; }
-  .fp-note-2 { animation-delay: 2.45s; }
-  .fp-note-3 { animation-delay: 3.61s; }
 }
 
-@keyframes fp-robot {
-  0%    { transform: translate(70px, 150px); }
-  10%   { transform: translate(70px, 150px); }
-  21.5% { transform: translate(70px, 240px); }
-  51%   { transform: translate(300px, 240px); }
-  61%   { transform: translate(300px, 240px); }
-  75.2% { transform: translate(410px, 240px); }
-  83.5% { transform: translate(410px, 240px); }
-  100%  { transform: translate(410px, 372px); }
-}
-
-/* pathLength=1, so dashoffset is the unrevealed fraction of the route. */
-@keyframes fp-route {
-  0%    { stroke-dashoffset: 1; }
-  10%   { stroke-dashoffset: 1; }
-  21.5% { stroke-dashoffset: 0.839; }
-  51%   { stroke-dashoffset: 0.429; }
-  61%   { stroke-dashoffset: 0.429; }
-  75.2% { stroke-dashoffset: 0.232; }
-  83.5% { stroke-dashoffset: 0.232; }
-  100%  { stroke-dashoffset: 0; }
-}
-
-@keyframes fp-note {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+@keyframes strike-draw {
+  from { background-size: 0% 0.07em; }
+  to   { background-size: 100% 0.07em; }
 }
 
 @media (prefers-reduced-motion: reduce) {

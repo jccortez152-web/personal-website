@@ -1,8 +1,8 @@
 # CLAUDE.md — Personal Website
 
-Project: Portfolio site for Johannes Christopher O. Cortez (Robot Care Specialist building AI automation at Relay Robotics). Audience is recruiters and hiring managers for AI automation / AI agent roles; the site must communicate "builds the agents that keep robots moving" in under 10 seconds. Never use tier labels (L1/L2/L3).
+Project: Portfolio site for Johannes Christopher O. Cortez (Robot Care Specialist building AI automation at Relay Robotics). Audience is recruiters and hiring managers for AI automation / AI agent roles; the site must show in under 10 seconds that he builds working agents that took over real manual work, then get them to watch a demo or make contact. Never use tier labels (L1/L2/L3).
 
-This file distills `front-end-skill.md` (design thinking) and `taste-skill.md` (engineering rules) into the working contract for this repo. When the two conflict, **taste-skill rules win** — they encode hard technical constraints. Where either conflicts with section 3 below (the "Wayfinding" design), section 3 wins.
+Design work follows the `frontend-design` skill (plan → review against defaults → build → screenshot critique). `front-end-skill.md` and `taste-skill.md` hold older background notes; where anything conflicts with section 3 below (the "Struck off" design), section 3 wins.
 
 ---
 
@@ -18,32 +18,33 @@ This file distills `front-end-skill.md` (design thinking) and `taste-skill.md` (
 ## 2. Content model
 
 - All content lives in `lib/data.ts`. Demo videos: `public/videos/<name>.mp4` + `posters/<name>.jpg`, resolved at build time by `lib/videos.ts` (a player only appears if the MP4 exists). Captions: drop `public/videos/captions/<name>.vtt` (WebVTT) and the player picks it up, on by default; every narrated video should have one.
-- Agents: `featured: true` items render as large alternating rows; the rest as a compact list.
+- Agents: every agent has `manual` — the task it took over, phrased as the manual instruction ("Score every case for QA by hand."). Agents with `hero: n` appear as the struck tasks in the hero, in that order, and lead the Agents list.
 - Apps: the first project (RoboChat) leads with its live demo (`RoboChatDemo` — don't change its logic); projects with `problem` get a case-study modal; `link` adds an external link.
 
-## 3. Design: "Wayfinding"
+## 3. Design: "Struck off"
 
-The page is a hospital floor plan. A floor route runs down the left gutter (desktop) and changes color per section; on mobile each section starts with a short colored bar. Each section is a destination with its own route color. The nav is a wayfinding sign (dark bar, color swatches, no numbers).
+The idea is his own line: "Every manual step is a candidate for an agent." The hero is a stack of real manual tasks, struck through on load; each struck task opens the demo of the agent that does it now. Agents reuse the device: the struck task, then the demo, then what the agent does.
 
-- **Colors (tokens only, never hardcoded):** `floor` #EEF1EC page, `wall` #FFFFFF surfaces, `ink` #14262B text, `ink-2` secondary, `rule` hairlines, `corridor` neutral route. Routes: `route-blue` #2457C5 (AI agents), `route-green` #1E8A5A (Apps), `route-yellow` #E5B21A (Experience — line/fill only, never text). Text variants `route-blue-text`, `route-green-text` keep 4.5:1; `route-green-deep` is the fill behind white text. `sign`/`sign-fg` for the nav and destination sign.
-- **Dark mode:** follows `prefers-color-scheme`; floor and ink swap, route colors stay, text tints lighten.
-- **Type:** Overpass 700/800 (display), Atkinson Hyperlegible 400/700 (body), via `next/font`. Hero `text-hero` (44→96px), section `text-title` (36→56px), body 18px / 1.6, max ~68ch. Sentence case everywhere.
-- **Focus:** two-tone — 3px outline in the section's `--route` color + 2px ink ring. `Section` sets `--route`.
-- **Components:** `Section` (route rail, junction, sticky "you are here" dot, heading with color swatch), `FeatureRow` / `CompactItem` (no cards; rows and rules), `DemoVideo` and `CaseStudy` (modals via `useDialog`).
+- **Colors (tokens only, never hardcoded):** `ceil` #8DB3D6 (scrub blue, full fields only: hero and contact, plus the portrait tile and play controls), `paper` #F6F8F9 page, `ink` #16202A text, `graphite` #4A5561 secondary, `navy` #1D4A78 links and the primary button, `rule` hairlines, `card` raised panes. Fixed in both themes: `on-ceil` (text on ceil), `navy-deep` (fill behind white text), `panel` / `panel-fg` (dark UI panes).
+- **Dark mode:** follows `prefers-color-scheme`; paper and ink swap, ceil fields stay ceil with `on-ceil` text.
+- **Type:** one family, Archivo (variable, `wdth` axis via `next/font`). `condensed` utility (wdth 68) for struck manual tasks and years; `expanded` (wdth 122) for titles and the headline; normal width for body. Hero tasks `text-strike` (34→68px), section `text-title` (36→56px), body 18px / 1.6, under 70 characters per line. Sentence case everywhere.
+- **The strike** (`.strike`, `.strike-draw` in `globals.css`): an ink bar drawn as a background so it follows wrapped lines. It means "an agent does this now" — never use it decoratively.
+- **Focus:** 3px outline in `--focus` (navy on paper; ceil sections set it to `on-ceil`).
+- **Layout:** left-aligned throughout. No cards: rows separated by rules and whitespace.
 
 ### AI tells — banned
 
-Near-black + single neon/amber accent; monospace labels; ALL-CAPS tracked eyebrows; § or 01/02 numbering; metadata joined with "·"; "→" on links; identical rounded cards; fade-in on every section; hover lift on cards; fake terminals or fake status text; gradient washes and glows; emoji.
+Warm cream + serif + terracotta; near-black + single neon/amber accent; broadsheet hairline columns; identical rounded cards with soft shadows; gradient washes and glows; monospace labels; ALL-CAPS tracked eyebrows; § or 01/02 numbering (unless the content is a real sequence); metadata joined with "·"; "→" on links; fade-in on every section; hover lift on cards; fake terminals or fake status text; emoji.
 
 ## 4. Motion
 
-- The hero floor plan (`FloorPlan`, `.fp-*` in `globals.css`) is the **only** automatic animation: robot follows the route once (4.8s, kept under 5s so no pause control is needed), callouts fade in at waypoints. Default styles are the finished state; the animation is wrapped in `prefers-reduced-motion: no-preference`.
+- The hero strikes are the **only** automatic animation: each task is struck in sequence on load (~1.5s total, once). Default styles are the finished, struck state; the animation is wrapped in `prefers-reduced-motion: no-preference`.
 - Everything else is static. Hover: link underline thickens, buttons change fill (120–150ms). Press: controls dim to 80% opacity (no movement). Buttons get `cursor: pointer` globally. Modals open instantly.
 
 ## 5. Layout Rules
 
-- Container: `max-w-[1280px] mx-auto px-4 md:px-8 lg:pl-[112px]` (the gutter holds the route at `left-[45px]`).
-- Responsive 375px → 1440px with no horizontal scroll; touch targets ≥ 44px.
+- Container: `max-w-[1200px] mx-auto px-4 md:px-8`.
+- Responsive 320px → 1440px with no horizontal scroll; touch targets ≥ 44px.
 
 ## 6. Content Discipline
 

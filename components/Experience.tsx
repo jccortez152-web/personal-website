@@ -1,30 +1,32 @@
-// Experience (yellow route) — a real sequence, so each role is a stop on the
-// route. On desktop the stops sit on the gutter route; on mobile the list
-// draws its own yellow line.
+// Experience — a real sequence: years in a narrow left column, the role on
+// the right.
 
 import { experience } from "@/lib/data";
 import Section from "./ui/Section";
 
 export default function Experience() {
   return (
-    <Section id="experience" route="yellow" title="Experience">
-      <ol className="relative max-w-[72ch] border-l-[6px] border-route-yellow lg:border-l-0 pl-8 lg:pl-0 space-y-16">
+    <Section id="experience" title="Experience">
+      <ol className="divide-y divide-rule">
         {experience.map((e) => (
-          <li key={e.company + e.role} className="relative">
-            <span
-              aria-hidden
-              className="absolute top-1 w-[22px] h-[22px] rounded-full bg-route-yellow border-[4px] border-ink -left-[46px] lg:-left-[75px]"
-            />
-            <p className="text-ink-2">{e.period}</p>
-            <h3 className="mt-1 text-[28px] md:text-[32px] leading-tight font-extrabold tracking-tight">
-              {e.company}
-            </h3>
-            <p className="mt-1 font-bold">{e.role}</p>
-            <ul className="mt-5 space-y-3 list-disc pl-5 marker:text-ink-2">
-              {e.bullets.map((b) => (
-                <li key={b}>{b}</li>
-              ))}
-            </ul>
+          <li
+            key={e.company + e.role}
+            className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-10 py-10 first:pt-0"
+          >
+            <p className="md:col-span-3 condensed font-bold text-[24px] md:text-[28px] leading-tight text-graphite">
+              {e.period}
+            </p>
+            <div className="md:col-span-9 max-w-[68ch]">
+              <h3 className="expanded text-[26px] md:text-[30px] leading-tight font-extrabold tracking-tight">
+                {e.company}
+              </h3>
+              <p className="mt-1 font-semibold">{e.role}</p>
+              <ul className="mt-5 space-y-3 list-disc pl-5 marker:text-graphite">
+                {e.bullets.map((b) => (
+                  <li key={b}>{b}</li>
+                ))}
+              </ul>
+            </div>
           </li>
         ))}
       </ol>

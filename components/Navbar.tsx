@@ -1,19 +1,17 @@
 "use client";
 
-// Wayfinding sign: dark sign bar, each destination with its route-color swatch.
-// The destination in view gets a thick bar in its color. Below lg it folds
-// into a "Menu" button that opens the same sign as a list.
+// Top bar: name, four destinations and the resume. The section in view is
+// underlined. Below md the links fold into a "Menu" button.
 
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { profile } from "@/lib/data";
 
 const links = [
-  { id: "about", label: "About", color: "var(--color-corridor)" },
-  { id: "agents", label: "AI agents", color: "var(--color-route-blue)" },
-  { id: "apps", label: "Apps", color: "var(--color-route-green)" },
-  { id: "experience", label: "Experience", color: "var(--color-route-yellow)" },
-  { id: "skills", label: "Skills", color: "var(--color-corridor)" },
-  { id: "contact", label: "Contact", color: "var(--color-sign-fg)" },
+  { id: "agents", label: "Agents" },
+  { id: "apps", label: "Apps" },
+  { id: "experience", label: "Experience" },
+  { id: "contact", label: "Contact" },
 ];
 
 export default function Navbar() {
@@ -44,45 +42,36 @@ export default function Navbar() {
   }, [open]);
 
   return (
-    <header
-      className="sticky top-0 z-40 bg-sign text-sign-fg"
-      // Focus ring is white on the dark sign (blue would be ~2.4:1 here).
-      style={{ "--route": "var(--color-sign-fg)" } as React.CSSProperties}
-    >
-      <div className="max-w-[1280px] mx-auto px-4 md:px-8 h-16 flex items-center justify-between gap-6">
-        <a
-          href="#top"
-          className="inline-flex items-center min-h-11 font-display font-extrabold text-xl tracking-tight"
-        >
+    <header className="sticky top-0 z-40 bg-paper border-b border-rule">
+      <div className="max-w-[1200px] mx-auto px-4 md:px-8 h-16 flex items-center justify-between gap-6">
+        <a href="#top" className="expanded inline-flex items-center min-h-11 font-extrabold text-lg tracking-tight">
           Johannes Cortez
         </a>
 
-        <nav aria-label="Site" className="hidden lg:block h-full">
-          <ul className="flex h-full items-stretch gap-1">
-            {links.map((l) => {
-              const on = active === l.id;
-              return (
-                <li key={l.id} className="relative flex">
-                  <a
-                    href={`#${l.id}`}
-                    aria-current={on ? "location" : undefined}
-                    className={`flex items-center gap-2.5 px-3 text-[16px] font-bold transition-colors duration-150 ${
-                      on ? "text-sign-fg" : "text-sign-fg-2 hover:text-sign-fg"
-                    }`}
-                  >
-                    <span aria-hidden className="w-3 h-3" style={{ background: l.color }} />
-                    {l.label}
-                  </a>
-                  <span
-                    aria-hidden
-                    className={`absolute left-3 right-3 bottom-0 h-1 transition-opacity duration-150 ${
-                      on ? "opacity-100" : "opacity-0"
-                    }`}
-                    style={{ background: l.color }}
-                  />
-                </li>
-              );
-            })}
+        <nav aria-label="Site" className="hidden md:block">
+          <ul className="flex items-center gap-7 text-[16px] font-semibold">
+            {links.map((l) => (
+              <li key={l.id}>
+                <a
+                  href={`#${l.id}`}
+                  aria-current={active === l.id ? "location" : undefined}
+                  className={`inline-flex items-center min-h-11 underline-offset-[0.35em] decoration-2 ${
+                    active === l.id ? "underline" : "hover:underline"
+                  }`}
+                >
+                  {l.label}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a
+                href={profile.links.resume}
+                download
+                className="inline-flex items-center min-h-11 px-4 rounded-md bg-navy text-paper font-bold transition-opacity duration-150 hover:opacity-90"
+              >
+                Resume
+              </a>
+            </li>
           </ul>
         </nav>
 
@@ -91,7 +80,7 @@ export default function Navbar() {
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="site-menu"
-          className="lg:hidden inline-flex items-center gap-2 min-h-11 px-3 rounded-md border border-sign-fg/30 font-bold"
+          className="md:hidden inline-flex items-center gap-2 min-h-11 px-3 rounded-md border border-rule font-semibold"
         >
           {open ? (
             <X className="w-5 h-5" strokeWidth={2} aria-hidden />
@@ -103,21 +92,25 @@ export default function Navbar() {
       </div>
 
       {open && (
-        <nav id="site-menu" aria-label="Site" className="lg:hidden border-t border-sign-fg/15">
-          <ul className="max-w-[1280px] mx-auto px-4 md:px-8 py-2">
+        <nav id="site-menu" aria-label="Site" className="md:hidden border-t border-rule">
+          <ul className="max-w-[1200px] mx-auto px-4 py-2">
             {links.map((l) => (
               <li key={l.id}>
                 <a
                   href={`#${l.id}`}
                   onClick={() => setOpen(false)}
                   aria-current={active === l.id ? "location" : undefined}
-                  className="flex items-center gap-4 min-h-12 text-lg font-bold"
+                  className="flex items-center min-h-12 text-lg font-semibold"
                 >
-                  <span aria-hidden className="w-4 h-4" style={{ background: l.color }} />
                   {l.label}
                 </a>
               </li>
             ))}
+            <li>
+              <a href={profile.links.resume} download className="flex items-center min-h-12 text-lg font-semibold">
+                Download resume
+              </a>
+            </li>
           </ul>
         </nav>
       )}

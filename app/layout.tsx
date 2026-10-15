@@ -1,20 +1,13 @@
 import type { Metadata } from "next";
-import { Atkinson_Hyperlegible, Overpass } from "next/font/google";
+import { Archivo } from "next/font/google";
 import "./globals.css";
 
-// Display: signage-style, like highway and hospital wayfinding.
-const overpass = Overpass({
+// One family. Variable weight plus the width axis (62–125), which the
+// `condensed` / `expanded` utilities use.
+const archivo = Archivo({
   subsets: ["latin"],
-  weight: ["700", "800"],
-  variable: "--font-overpass",
-  display: "swap",
-});
-
-// Body: designed for legibility.
-const atkinson = Atkinson_Hyperlegible({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-atkinson",
+  axes: ["wdth"],
+  variable: "--font-archivo",
   display: "swap",
 });
 
@@ -67,7 +60,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${overpass.variable} ${atkinson.variable}`}
+      className={archivo.variable}
     >
       <body>{children}</body>
     </html>

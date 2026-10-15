@@ -1,85 +1,94 @@
-// Hero — headline and actions on the left, the floor plan on the right with a
-// staff-ID badge clipped to it. The page route starts here, bottom left.
+// Hero — the manual tasks my agents took over, struck through on load. Each
+// struck task is a button that opens the demo of the agent that does it now
+// (or jumps to its entry when there's no video). Type only, on a ceil field.
 
-import Image from "next/image";
-import FloorPlan from "./FloorPlan";
-import { profile } from "@/lib/data";
+import { agents, profile } from "@/lib/data";
+import { getVideos } from "@/lib/videos";
+import DemoVideo from "./ui/DemoVideo";
 
 export default function Hero() {
+  const tasks = agents
+    .filter((a) => a.hero)
+    .sort((a, b) => (a.hero ?? 0) - (b.hero ?? 0));
+  const videos = getVideos(tasks.map((a) => a.video));
+
+  const lineClass =
+    "condensed text-left text-balance font-bold text-strike text-on-ceil hover:opacity-75 transition-opacity duration-150";
+
   return (
     <section
       id="top"
-      aria-label="Introduction"
-      style={{ "--route": "var(--color-route-blue)" } as React.CSSProperties}
+      aria-labelledby="hero-title"
+      className="bg-ceil text-on-ceil"
+      style={{ "--focus": "var(--color-on-ceil)" } as React.CSSProperties}
     >
-      <div className="relative max-w-[1280px] mx-auto px-4 md:px-8 lg:pl-[112px] pt-12 md:pt-20 pb-20 md:pb-28">
-        {/* Start of the page route */}
-        <div aria-hidden className="hidden lg:block absolute left-[45px] top-[62%] bottom-0 w-[6px] bg-corridor" />
-        <span
-          aria-hidden
-          className="hidden lg:block absolute left-[36px] top-[62%] -mt-3 w-6 h-6 rounded-full border-[6px] border-corridor bg-floor"
-        />
+      <div className="max-w-[1200px] mx-auto px-4 md:px-8 pt-10 md:pt-14 pb-16 md:pb-20">
+        <ul className="space-y-1 md:space-y-0">
+          {tasks.map((a, i) => {
+            const video = a.video ? videos[a.video] : undefined;
+            const text = (
+              <>
+                <s
+                  className="strike strike-draw no-underline"
+                  style={{ "--i": i } as React.CSSProperties}
+                >
+                  {a.manual}
+                </s>
+                <span className="sr-only">
+                  {video
+                    ? ` Now done by the ${a.name}. Play its demo.`
+                    : ` Now done by the ${a.name}. Read about it.`}
+                </span>
+              </>
+            );
+            return (
+              <li key={a.id}>
+                {video ? (
+                  <DemoVideo
+                    title={a.name}
+                    src={video.src}
+                    poster={video.poster}
+                    captions={video.captions}
+                    triggerClassName={lineClass}
+                  >
+                    {text}
+                  </DemoVideo>
+                ) : (
+                  <a href={`#agent-${a.id}`} className={`inline-block ${lineClass}`}>
+                    {text}
+                  </a>
+                )}
+              </li>
+            );
+          })}
+        </ul>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
-          <div className="lg:col-span-6">
-            <h1 className="text-hero font-extrabold text-ink text-balance">
-              I build the agents that keep robots moving.
-            </h1>
-            <p className="mt-6 max-w-[34ch] text-xl text-ink-2">{profile.headline}</p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-3">
-              <a
-                href="#agents"
-                className="inline-flex items-center justify-center min-h-12 px-6 rounded-md bg-route-blue text-white font-bold transition-colors duration-150 hover:bg-ink"
-              >
-                See my work
-              </a>
-              <a
-                href={profile.links.resume}
-                download
-                className="inline-flex items-center justify-center min-h-12 px-6 rounded-md border-2 border-ink text-ink font-bold transition-colors duration-150 hover:bg-ink hover:text-floor"
-              >
-                Download resume
-              </a>
-            </div>
-          </div>
+        <p className="mt-5 text-[16px]">Select a task to see the agent that does it now.</p>
 
-          <div className="lg:col-span-6 relative">
-            <FloorPlan />
-            <IdBadge />
-          </div>
+        <h1
+          id="hero-title"
+          className="expanded mt-10 md:mt-12 font-extrabold text-[clamp(2rem,1.2rem+3.4vw,4rem)] leading-[1.05] tracking-tight"
+        >
+          My agents do these now.
+        </h1>
+        <p className="mt-5 max-w-[46ch] text-xl">{profile.headline}</p>
+
+        <div className="mt-8 flex flex-col sm:flex-row gap-3">
+          <a
+            href="#agents"
+            className="inline-flex items-center justify-center min-h-12 px-6 rounded-md bg-on-ceil text-ceil font-bold transition-colors duration-150 hover:bg-navy-deep hover:text-white"
+          >
+            Watch the demos
+          </a>
+          <a
+            href={profile.links.resume}
+            download
+            className="inline-flex items-center justify-center min-h-12 px-6 rounded-md border-2 border-on-ceil font-bold transition-colors duration-150 hover:bg-on-ceil hover:text-ceil"
+          >
+            Download resume
+          </a>
         </div>
       </div>
     </section>
-  );
-}
-
-// Staff ID badge: clipped onto the plan on large screens, inline below it
-// on small ones.
-function IdBadge() {
-  return (
-    <div className="mt-8 lg:mt-0 lg:absolute lg:-bottom-20 lg:-left-10 w-full max-w-[320px] bg-wall border border-rule rounded-lg shadow-[0_2px_0_var(--color-rule)]">
-      <span aria-hidden className="block mx-auto mt-2 w-12 h-2 rounded-full bg-floor border border-rule" />
-      <span aria-hidden className="block mt-2 h-2 bg-route-blue" />
-      <div className="flex gap-4 p-4">
-        <div className="relative shrink-0 w-[84px] h-[104px] rounded-sm overflow-hidden bg-floor border border-rule">
-          <Image
-            src="/jc-portrait.png"
-            alt={`Photo of ${profile.name}`}
-            fill
-            sizes="84px"
-            className="object-cover object-top"
-          />
-        </div>
-        <div className="min-w-0">
-          <p className="font-display font-extrabold text-xl leading-tight text-ink">
-            {profile.shortName}
-          </p>
-          <p className="mt-1 text-[15px] leading-snug text-ink-2">{profile.role}</p>
-          <p className="mt-2 text-[15px] leading-snug text-ink">
-            Open to AI automation and AI agent roles
-          </p>
-        </div>
-      </div>
-    </div>
   );
 }

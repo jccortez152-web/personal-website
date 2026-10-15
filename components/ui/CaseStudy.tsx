@@ -25,7 +25,7 @@ export default function CaseStudy({ project }: { project: Project }) {
         ref={triggerRef}
         type="button"
         onClick={() => setOpen(true)}
-        className="link inline-flex items-center min-h-11 font-bold text-route-green-text"
+        className="link inline-flex items-center min-h-11 font-bold text-navy"
       >
         Read the case study
         <span className="sr-only">: {project.name}</span>
@@ -35,8 +35,8 @@ export default function CaseStudy({ project }: { project: Project }) {
         createPortal(
           <div
             onClick={close}
-            style={{ "--route": "var(--color-route-green)" } as React.CSSProperties}
-            className="fixed inset-0 z-50 bg-sign/85 flex items-end md:items-center justify-center md:p-6"
+            style={{ "--focus": "var(--color-navy)" } as React.CSSProperties}
+            className="fixed inset-0 z-50 bg-panel/85 flex items-end md:items-center justify-center md:p-6"
           >
             <div
               ref={dialogRef}
@@ -44,23 +44,23 @@ export default function CaseStudy({ project }: { project: Project }) {
               aria-modal="true"
               aria-labelledby={titleId}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-3xl max-h-[90dvh] overflow-y-auto bg-wall text-ink md:rounded-lg border-t-[6px] border-route-green"
+              className="relative w-full max-w-3xl max-h-[90dvh] overflow-y-auto bg-card text-ink md:rounded-lg"
             >
               <button
                 type="button"
                 data-autofocus
                 onClick={close}
                 aria-label="Close case study"
-                className="absolute top-3 right-3 w-11 h-11 inline-flex items-center justify-center rounded-full hover:bg-floor transition-colors duration-150"
+                className="absolute top-3 right-3 w-11 h-11 inline-flex items-center justify-center rounded-full hover:bg-paper transition-colors duration-150"
               >
                 <X className="w-5 h-5" strokeWidth={2} aria-hidden />
               </button>
 
               <div className="p-6 md:p-12">
-                <h3 id={titleId} className="pr-12 text-title font-extrabold">
+                <h3 id={titleId} className="expanded pr-12 text-title font-extrabold tracking-tight">
                   {project.name}
                 </h3>
-                {project.tagline && <p className="mt-3 text-xl text-ink-2">{project.tagline}</p>}
+                {project.tagline && <p className="mt-3 text-xl text-graphite">{project.tagline}</p>}
 
                 <dl className="mt-10 space-y-8">
                   <Part label="Problem" body={project.problem} />
@@ -81,8 +81,8 @@ function Part({ label, body, strong }: { label: string; body?: string; strong?: 
   if (!body) return null;
   return (
     <div>
-      <dt className="font-display font-extrabold text-xl">{label}</dt>
-      <dd className={`mt-2 max-w-[68ch] ${strong ? "text-ink font-bold" : "text-ink-2"}`}>{body}</dd>
+      <dt className="font-extrabold text-xl">{label}</dt>
+      <dd className={`mt-2 max-w-[68ch] ${strong ? "text-ink font-bold" : "text-graphite"}`}>{body}</dd>
     </div>
   );
 }
