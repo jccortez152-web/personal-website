@@ -22,12 +22,15 @@ export default function DemoVideo({
   title,
   src,
   poster,
+  captions,
   tone = "blue",
   thumb = false,
 }: {
   title: string;
   src: string;
   poster?: string;
+  /** WebVTT file; shown on by default so narration is readable on mute. */
+  captions?: string;
   tone?: keyof typeof tones;
   thumb?: boolean;
 }) {
@@ -127,6 +130,9 @@ export default function DemoVideo({
                   controls
                   className="w-full h-full"
                 >
+                  {captions && (
+                    <track kind="captions" src={captions} srcLang="en" label="English" default />
+                  )}
                   Your browser can&apos;t play this video.
                 </video>
               </div>

@@ -78,6 +78,27 @@ h3 {
   font-family: var(--font-display);
 }
 
+/* No single orphaned word on short headings and the pull quote. */
+h1,
+h2,
+h3,
+h4,
+blockquote {
+  text-wrap: balance;
+}
+
+/* Tailwind v4 no longer gives buttons a pointer cursor. */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+/* Pressed feedback on every control: a brief dim, no movement (no layout
+   shift, no lift). */
+:where(a[href], button:not(:disabled)):active {
+  opacity: 0.8;
+}
+
 /* Anchor jumps land below the sticky sign. */
 section[id] {
   scroll-margin-top: 64px;
@@ -112,8 +133,10 @@ section[id] {
    Hero floor plan — the only automatic animation on the page. Default styles
    are the finished state (robot at the destination, route drawn, callouts
    shown), so reduced-motion users and no-JS renders see the end result.
-   Timeline (6s): hold at elevator, ride the corridor, hold at the fire door,
-   hold near Room 412, arrive at the nurses' station.
+   Timeline (4.8s, under WCAG's 5-second limit for auto-playing motion
+   without a pause control): hold at elevator, ride the corridor, hold at the
+   fire door, hold near Room 412, arrive at the nurses' station. Note delays
+   are the keyframe percentages below times 4.8s.
    --------------------------------------------------------------------------- */
 .fp-robot {
   transform: translate(410px, 372px);
@@ -125,20 +148,17 @@ section[id] {
 
 @media (prefers-reduced-motion: no-preference) {
   .fp-robot {
-    animation: fp-robot 6s linear both;
+    animation: fp-robot 4.8s linear both;
   }
   .fp-route {
-    animation: fp-route 6s linear both;
+    animation: fp-route 4.8s linear both;
   }
   .fp-note {
     animation: fp-note 150ms ease-out both;
   }
-  .fp-note-1 { animation-delay: 0.2s; }
-  .fp-note-2 { animation-delay: 3.06s; }
-  .fp-note-3 { animation-delay: 4.51s; }
-  .fp-arrived {
-    animation: fp-note 200ms ease-out 5.9s both;
-  }
+  .fp-note-1 { animation-delay: 0.16s; }
+  .fp-note-2 { animation-delay: 2.45s; }
+  .fp-note-3 { animation-delay: 3.61s; }
 }
 
 @keyframes fp-robot {

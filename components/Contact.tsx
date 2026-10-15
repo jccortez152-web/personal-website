@@ -32,7 +32,8 @@ export default function Contact() {
 
           <a
             href={`mailto:${profile.email}`}
-            className="link mt-10 inline-block font-display font-extrabold text-[clamp(1.5rem,1rem+2.4vw,2.75rem)] break-all"
+            // Sized to stay on one line down to 375px; wraps cleanly below that.
+            className="link mt-10 inline-block font-display font-extrabold text-[clamp(1.125rem,0.4rem+3.6vw,2.75rem)] [overflow-wrap:anywhere]"
           >
             {profile.email}
           </a>

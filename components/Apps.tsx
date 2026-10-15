@@ -44,7 +44,7 @@ export default function Apps() {
           </div>
           {leadVideo && (
             <div className="lg:col-span-6">
-              <DemoVideo title={lead.name} src={leadVideo.src} poster={leadVideo.poster} tone="green" />
+              <DemoVideo title={lead.name} src={leadVideo.src} poster={leadVideo.poster} captions={leadVideo.captions} tone="green" />
             </div>
           )}
         </div>

@@ -34,7 +34,7 @@ export function FeatureRow({
     <article className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-center">
       <div className={`lg:col-span-7 ${flip ? "lg:order-2" : ""}`}>
         {video ? (
-          <DemoVideo title={name} src={video.src} poster={video.poster} tone={tone} />
+          <DemoVideo title={name} src={video.src} poster={video.poster} captions={video.captions} tone={tone} />
         ) : (
           <NoVideo tone={tone} />
         )}
@@ -78,7 +78,7 @@ export function CompactItem({
     <article className="grid grid-cols-[112px_1fr] sm:grid-cols-[160px_1fr] gap-4 sm:gap-6 py-6 border-t border-rule">
       <div>
         {video ? (
-          <DemoVideo title={name} src={video.src} poster={video.poster} tone={tone} thumb />
+          <DemoVideo title={name} src={video.src} poster={video.poster} captions={video.captions} tone={tone} thumb />
         ) : (
           <NoVideo tone={tone} small />
         )}

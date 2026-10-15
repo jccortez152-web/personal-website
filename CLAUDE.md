@@ -17,7 +17,7 @@ This file distills `front-end-skill.md` (design thinking) and `taste-skill.md` (
 
 ## 2. Content model
 
-- All content lives in `lib/data.ts`. Demo videos: `public/videos/<name>.mp4` + `posters/<name>.jpg`, resolved at build time by `lib/videos.ts` (a player only appears if the MP4 exists).
+- All content lives in `lib/data.ts`. Demo videos: `public/videos/<name>.mp4` + `posters/<name>.jpg`, resolved at build time by `lib/videos.ts` (a player only appears if the MP4 exists). Captions: drop `public/videos/captions/<name>.vtt` (WebVTT) and the player picks it up, on by default; every narrated video should have one.
 - Agents: `featured: true` items render as large alternating rows; the rest as a compact list.
 - Apps: the first project (RoboChat) leads with its live demo (`RoboChatDemo` — don't change its logic); projects with `problem` get a case-study modal; `link` adds an external link.
 
@@ -37,8 +37,8 @@ Near-black + single neon/amber accent; monospace labels; ALL-CAPS tracked eyebro
 
 ## 4. Motion
 
-- The hero floor plan (`FloorPlan`, `.fp-*` in `globals.css`) is the **only** automatic animation: robot follows the route once (~6s), callouts fade in at waypoints. Default styles are the finished state; the animation is wrapped in `prefers-reduced-motion: no-preference`.
-- Everything else is static. Hover: link underline thickens, buttons change fill (120–150ms). Modals open instantly.
+- The hero floor plan (`FloorPlan`, `.fp-*` in `globals.css`) is the **only** automatic animation: robot follows the route once (4.8s, kept under 5s so no pause control is needed), callouts fade in at waypoints. Default styles are the finished state; the animation is wrapped in `prefers-reduced-motion: no-preference`.
+- Everything else is static. Hover: link underline thickens, buttons change fill (120–150ms). Press: controls dim to 80% opacity (no movement). Buttons get `cursor: pointer` globally. Modals open instantly.
 
 ## 5. Layout Rules
 
