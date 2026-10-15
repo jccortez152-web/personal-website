@@ -1,7 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- ceil tile with three task lines, the top two struck through -->
-  <rect width="64" height="64" rx="12" fill="#8DB3D6"/>
-  <rect x="12" y="15" width="40" height="7" rx="2" fill="#16202A"/>
-  <rect x="12" y="29" width="34" height="7" rx="2" fill="#16202A"/>
-  <rect x="12" y="43" width="22" height="7" rx="2" fill="#16202A" fill-opacity="0.35"/>
+  <!-- black rounded tile with a white "JC" monogram -->
+  <rect width="64" height="64" rx="14" fill="#000000"/>
+  <text x="32" y="42" text-anchor="middle"
+        font-family="Inter, -apple-system, 'Segoe UI', Arial, sans-serif"
+        font-weight="700" font-size="28" letter-spacing="-1.5"
+        fill="#F5F5F7">JC</text>
 </svg>

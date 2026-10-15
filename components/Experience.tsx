@@ -1,27 +1,22 @@
-// Experience — a real sequence: years in a narrow left column, the role on
-// the right.
+// Experience — clean timeline on white: dates left, role right.
 
 import { experience } from "@/lib/data";
 import Section from "./ui/Section";
 
 export default function Experience() {
   return (
-    <Section id="experience" title="Experience">
-      <ol className="divide-y divide-rule">
+    <Section id="experience" title="Experience.">
+      <ol className="max-w-[880px] mx-auto divide-y divide-rule">
         {experience.map((e) => (
           <li
             key={e.company + e.role}
-            className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-10 py-10 first:pt-0"
+            className="reveal grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-10 py-10 first:pt-0"
           >
-            <p className="md:col-span-3 condensed font-bold text-[24px] md:text-[28px] leading-tight text-graphite">
-              {e.period}
-            </p>
-            <div className="md:col-span-9 max-w-[68ch]">
-              <h3 className="expanded text-[26px] md:text-[30px] leading-tight font-extrabold tracking-tight">
-                {e.company}
-              </h3>
-              <p className="mt-1 font-semibold">{e.role}</p>
-              <ul className="mt-5 space-y-3 list-disc pl-5 marker:text-graphite">
+            <p className="md:col-span-3 text-[17px] font-medium text-fg-2">{e.period}</p>
+            <div className="md:col-span-9">
+              <h3 className="text-[28px] font-bold leading-tight tracking-[-0.02em]">{e.company}</h3>
+              <p className="mt-1 text-[19px] font-medium">{e.role}</p>
+              <ul className="mt-5 space-y-3 list-disc pl-5 marker:text-fg-2 text-fg-2">
                 {e.bullets.map((b) => (
                   <li key={b}>{b}</li>
                 ))}

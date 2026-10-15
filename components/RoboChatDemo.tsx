@@ -140,8 +140,8 @@ export default function RoboChatDemo() {
                 disabled={busy || used}
                 className={`text-left text-[16px] min-h-11 px-4 py-2 rounded-md border-2 transition-colors duration-150 disabled:cursor-not-allowed ${
                   used
-                    ? "border-rule text-graphite line-through"
-                    : "border-rule bg-card text-ink hover:border-navy disabled:opacity-50"
+                    ? "border-rule text-fg-2 line-through"
+                    : "border-rule bg-base text-fg hover:border-blue disabled:opacity-50"
                 }`}
               >
                 {p.customer}
@@ -152,7 +152,7 @@ export default function RoboChatDemo() {
             type="button"
             onClick={reset}
             disabled={busy || empty}
-            className="link ml-auto inline-flex items-center gap-2 min-h-11 px-2 font-bold text-ink disabled:opacity-50 disabled:cursor-not-allowed disabled:no-underline"
+            className="link ml-auto inline-flex items-center gap-2 min-h-11 px-2 font-bold text-fg disabled:opacity-50 disabled:cursor-not-allowed disabled:no-underline"
           >
             <RotateCcw className="w-4 h-4" strokeWidth={2} aria-hidden />
             Reset
@@ -172,21 +172,21 @@ function CustomerPane({
   scrollRef: React.RefObject<HTMLDivElement | null>;
 }) {
   return (
-    <div className="rounded-lg bg-card text-ink border border-rule overflow-hidden flex flex-col h-[440px]">
+    <div className="rounded-[20px] bg-base text-fg border border-rule overflow-hidden flex flex-col h-[440px]">
       <div className="px-5 py-3 border-b border-rule flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <span
             aria-hidden
-            className="w-9 h-9 rounded-full bg-navy-deep text-white flex items-center justify-center text-[13px] font-bold"
+            className="w-9 h-9 rounded-full bg-blue text-white flex items-center justify-center text-[13px] font-bold"
           >
             RC
           </span>
           <div>
             <div className="font-bold text-[16px]">RoboCare</div>
-            <div className="text-[14px] text-graphite">An operator is here and usually replies in minutes</div>
+            <div className="text-[14px] text-fg-2">An operator is here and usually replies in minutes</div>
           </div>
         </div>
-        <span className="hidden sm:inline text-[14px] text-graphite">Customer view</span>
+        <span className="hidden sm:inline text-[14px] text-fg-2">Customer view</span>
       </div>
 
       <div
@@ -194,10 +194,10 @@ function CustomerPane({
         role="log"
         aria-label="Customer chat"
         tabIndex={0}
-        className="flex-1 overflow-y-auto px-5 py-6 space-y-3 scroll-smooth bg-paper"
+        className="flex-1 overflow-y-auto px-5 py-6 space-y-3 scroll-smooth bg-alt"
       >
         {msgs.length === 0 && (
-          <p className="text-graphite text-[15px] text-center py-12">
+          <p className="text-fg-2 text-[15px] text-center py-12">
             Pick a sample message below to start a chat.
           </p>
         )}
@@ -212,12 +212,12 @@ function CustomerPane({
           disabled
           aria-label="Message (disabled in demo)"
           placeholder="Type a message…"
-          className="flex-1 bg-transparent text-[15px] text-ink placeholder:text-graphite outline-none cursor-not-allowed"
+          className="flex-1 bg-transparent text-[15px] text-fg placeholder:text-fg-2 outline-none cursor-not-allowed"
         />
         <button
           type="button"
           disabled
-          className="w-11 h-11 inline-flex items-center justify-center text-graphite cursor-not-allowed"
+          className="w-11 h-11 inline-flex items-center justify-center text-fg-2 cursor-not-allowed"
           aria-label="Send (disabled in demo)"
         >
           <Send className="w-4 h-4" strokeWidth={2} aria-hidden />
@@ -237,7 +237,7 @@ function CustomerBubble({
   if (role === "customer") {
     return (
       <div className="flex justify-end">
-        <div className="max-w-[85%] bg-ink text-paper px-4 py-2.5 rounded-2xl rounded-br-sm text-[15px] leading-relaxed">
+        <div className="max-w-[85%] bg-blue text-white px-4 py-2.5 rounded-2xl rounded-br-sm text-[15px] leading-relaxed">
           {text}
         </div>
       </div>
@@ -247,11 +247,11 @@ function CustomerBubble({
     <div className="flex justify-start gap-2">
       <span
         aria-hidden
-        className="w-7 h-7 rounded-full bg-navy-deep text-white flex items-center justify-center text-[12px] font-bold shrink-0 mt-1"
+        className="w-7 h-7 rounded-full bg-blue text-white flex items-center justify-center text-[12px] font-bold shrink-0 mt-1"
       >
         JC
       </span>
-      <div className="max-w-[85%] bg-card border border-rule px-4 py-2.5 rounded-2xl rounded-bl-sm text-[15px] leading-relaxed">
+      <div className="max-w-[85%] bg-base border border-rule px-4 py-2.5 rounded-2xl rounded-bl-sm text-[15px] leading-relaxed">
         {text}
       </div>
     </div>
@@ -267,14 +267,14 @@ function SlackPane({
   scrollRef: React.RefObject<HTMLDivElement | null>;
 }) {
   return (
-    <div className="rounded-lg bg-panel text-panel-fg overflow-hidden flex flex-col h-[440px]">
-      <div className="px-5 py-3 border-b border-panel-fg/15 flex items-center justify-between gap-4">
+    <div className="rounded-[20px] bg-tile-dark text-on-black overflow-hidden flex flex-col h-[440px]">
+      <div className="px-5 py-3 border-b border-on-black/15 flex items-center justify-between gap-4">
         <div className="flex items-center gap-2 font-bold text-[16px]">
           <Slack className="w-4 h-4" strokeWidth={2} aria-hidden />
-          <Hash className="w-4 h-4 text-panel-fg-2" strokeWidth={2} aria-hidden />
+          <Hash className="w-4 h-4 text-on-black-2" strokeWidth={2} aria-hidden />
           robocare-customer-chat
         </div>
-        <span className="hidden sm:inline text-[14px] text-panel-fg-2">Operator view</span>
+        <span className="hidden sm:inline text-[14px] text-on-black-2">Operator view</span>
       </div>
 
       <div
@@ -284,20 +284,20 @@ function SlackPane({
         className="flex-1 overflow-y-auto px-5 py-6 space-y-4 scroll-smooth text-[15px]"
       >
         {events.length === 0 && (
-          <p className="text-panel-fg-2 text-center py-12">
+          <p className="text-on-black-2 text-center py-12">
             The channel is quiet, waiting for incoming chats.
           </p>
         )}
         {events.map((e, i) => {
           if (e.kind === "notification") {
             return (
-              <div key={i} className="border-l-4 border-ceil pl-3 py-1">
+              <div key={i} className="border-l-4 border-blue pl-3 py-1">
                 <div className="flex items-center gap-2 font-bold mb-1">
                   <Bell className="w-4 h-4" strokeWidth={2} aria-hidden />
                   New chat from {e.site}
                 </div>
-                <div className="text-panel-fg-2 leading-relaxed">
-                  <span className="text-panel-fg">{e.nurse}:</span> &ldquo;
+                <div className="text-on-black-2 leading-relaxed">
+                  <span className="text-on-black">{e.nurse}:</span> &ldquo;
                   {e.preview}&rdquo;
                 </div>
               </div>
@@ -305,10 +305,10 @@ function SlackPane({
           }
           if (e.kind === "typing") {
             return (
-              <div key={i} className="flex items-center gap-3 text-panel-fg-2">
+              <div key={i} className="flex items-center gap-3 text-on-black-2">
                 <span
                   aria-hidden
-                  className="w-7 h-7 rounded-md bg-navy-deep text-white flex items-center justify-center text-[12px] font-bold shrink-0"
+                  className="w-7 h-7 rounded-md bg-blue text-white flex items-center justify-center text-[12px] font-bold shrink-0"
                 >
                   JC
                 </span>
@@ -320,24 +320,24 @@ function SlackPane({
             <div key={i} className="flex items-start gap-3">
               <span
                 aria-hidden
-                className="w-7 h-7 rounded-md bg-navy-deep text-white flex items-center justify-center text-[12px] font-bold shrink-0 mt-0.5"
+                className="w-7 h-7 rounded-md bg-blue text-white flex items-center justify-center text-[12px] font-bold shrink-0 mt-0.5"
               >
                 JC
               </span>
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2">
                   <span className="font-bold">Johannes Cortez</span>
-                  <span className="text-panel-fg-2 text-[13px]">just now</span>
+                  <span className="text-on-black-2 text-[13px]">just now</span>
                 </div>
-                <div className="text-panel-fg leading-relaxed mt-1">{e.text}</div>
+                <div className="text-on-black leading-relaxed mt-1">{e.text}</div>
               </div>
             </div>
           );
         })}
       </div>
 
-      <div className="border-t border-panel-fg/15 px-3 py-2">
-        <div className="border border-panel-fg/25 rounded-md px-3 py-2 text-[14px] text-panel-fg-2">
+      <div className="border-t border-on-black/15 px-3 py-2">
+        <div className="border border-on-black/25 rounded-md px-3 py-2 text-[14px] text-on-black-2">
           Message #robocare-customer-chat
         </div>
       </div>

@@ -1,22 +1,15 @@
-// Footer — quiet colophon on paper, under the closing ceil field.
+// Footer — small gray colophon on light gray, Apple-style.
 
 import { profile } from "@/lib/data";
 
 export default function Footer() {
   return (
-    <footer>
-      <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-10 grid grid-cols-1 md:grid-cols-3 gap-4 text-[15px] text-graphite">
+    <footer className="bg-alt">
+      <div className="max-w-[1080px] mx-auto px-5 md:px-8 py-8 text-[13px] leading-relaxed text-fg-2 flex flex-col md:flex-row md:justify-between gap-2">
         <p>
-          <span className="font-semibold text-ink">{profile.name}</span>
-          <br />
-          {profile.location}
+          Copyright © {new Date().getFullYear()} {profile.name}. {profile.location}.
         </p>
-        <p>
-          Set in Archivo.
-          <br />
-          Built with Next.js, Tailwind and Claude Code.
-        </p>
-        <p className="md:text-right">© {new Date().getFullYear()}</p>
+        <p>Set in Inter. Built with Next.js, Tailwind and Claude Code.</p>
       </div>
     </footer>
   );

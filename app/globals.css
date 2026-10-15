@@ -1,71 +1,68 @@
 @import "tailwindcss";
 
-/* "Struck off" design tokens. Scrub-blue ceil fields bookend the page (hero,
-   contact); everything between sits on cool clinical paper. One family,
-   Archivo, whose width axis carries the personality: condensed for the
-   manual tasks that get struck through, expanded for what replaced them.
-   Components use these utilities only (bg-paper, text-ink, bg-ceil...). */
+/* Apple-style design tokens: white and light-gray bands alternating with
+   pure-black bands, near-black text, gray secondary text, a single blue for
+   actions. No Apple assets: Inter stands in for SF Pro. Components use these
+   utilities only (bg-base, bg-alt, text-fg, text-fg-2, bg-blue...). */
 @theme {
-  --color-ceil: #8db3d6;
-  --color-paper: #f6f8f9;
-  --color-ink: #16202a;
-  --color-graphite: #4a5561;
-  --color-navy: #1d4a78;
-  --color-rule: rgb(22 32 42 / 0.14);
-  /* Raised UI panes (modals, the RoboChat customer view). */
-  --color-card: #ffffff;
+  /* Theme-aware (swap in dark mode). */
+  --color-base: #ffffff; /* main bands */
+  --color-alt: #f5f5f7; /* alternate bands */
+  --color-tile: #ffffff; /* tiles sitting on alt bands */
+  --color-fg: #1d1d1f;
+  --color-fg-2: #6e6e73; /* 5.1:1 on white, 4.6:1 on #f5f5f7 */
+  --color-link: #0066cc;
+  --color-rule: rgb(29 29 31 / 0.12);
 
   /* Fixed in both themes. */
-  --color-on-ceil: #16202a; /* text and strike bars on ceil: 7.2:1 */
-  --color-navy-deep: #1d4a78; /* fill behind white text: 8:1 */
-  --color-panel: #16202a; /* dark UI panes (RoboChat operator view) */
-  --color-panel-fg: #ffffff;
-  --color-panel-fg-2: #c3cdd6;
+  --color-blue: #0071e3; /* pill buttons, white text 4.6:1 */
+  --color-black: #000000; /* dark bands */
+  --color-on-black: #f5f5f7;
+  --color-on-black-2: #a1a1a6; /* 7.7:1 on black */
+  --color-link-on-black: #2997ff;
+  --color-tile-dark: #1d1d1f; /* tiles on black bands */
 
-  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
-  --text-strike: clamp(2.125rem, 1rem + 3.4vw, 4.25rem);
-  --text-strike--line-height: 1.04;
-  --text-title: clamp(2.25rem, 1.6rem + 2.2vw, 3.5rem);
-  --text-title--line-height: 1.05;
-  --text-body: 1.125rem;
+  --text-hero: clamp(2.75rem, 1.4rem + 5vw, 5rem);
+  --text-hero--line-height: 1.05;
+  --text-hero--letter-spacing: -0.03em;
+  --text-title: clamp(2.25rem, 1.5rem + 2.8vw, 3.5rem);
+  --text-title--line-height: 1.07;
+  --text-title--letter-spacing: -0.025em;
+  --text-lede: clamp(1.25rem, 1.1rem + 0.6vw, 1.75rem);
+  --text-lede--line-height: 1.35;
+  --text-body: 1.0625rem;
   --text-body--line-height: 1.6;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-paper: #121a22;
-    --color-ink: #e8eef2;
-    --color-graphite: #aeb9c3;
-    --color-navy: #9dc0e8;
-    --color-rule: rgb(232 238 242 / 0.16);
-    --color-card: #1a2530;
+    --color-base: #000000;
+    --color-alt: #101012;
+    --color-tile: #1d1d1f;
+    --color-fg: #f5f5f7;
+    --color-fg-2: #a1a1a6;
+    --color-link: #2997ff;
+    --color-rule: rgb(245 245 247 / 0.14);
   }
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 72px;
-  background: var(--color-paper);
+  scroll-padding-top: 64px;
+  background: var(--color-base);
   color-scheme: light dark;
 }
 
 body {
-  background: var(--color-paper);
-  color: var(--color-ink);
+  background: var(--color-base);
+  color: var(--color-fg);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--text-body--line-height);
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
-}
-
-/* Width axis. Weight still follows font-weight. */
-@utility condensed {
-  font-variation-settings: "wdth" 68;
-}
-@utility expanded {
-  font-variation-settings: "wdth" 122;
 }
 
 h1,
@@ -77,63 +74,58 @@ blockquote {
 }
 
 ::selection {
-  background: var(--color-ceil);
-  color: var(--color-on-ceil);
+  background: var(--color-blue);
+  color: #ffffff;
 }
 
-/* Focus: 3px ring in --focus (navy on paper, ink on ceil fields). */
+/* Focus: blue ring (lighter blue on black bands, which set --focus). */
 :focus-visible {
-  outline: 3px solid var(--focus, var(--color-navy));
+  outline: 3px solid var(--focus, var(--color-blue));
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
-/* Tailwind v4 no longer gives buttons a pointer cursor. */
 button:not(:disabled),
 [role="button"]:not([aria-disabled="true"]) {
   cursor: pointer;
 }
 
-/* Pressed feedback on every control: a brief dim, no movement. */
+/* Pressed feedback: a brief dim, no movement. */
 :where(a[href], button:not(:disabled)):active {
   opacity: 0.8;
 }
 
-/* Links: underlined; the underline thickens on hover. */
+/* Text link with the underline on hover only, Apple-style. */
 @utility link {
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
-  transition: text-decoration-thickness 120ms ease-out;
+  text-decoration-line: none;
   &:hover {
-    text-decoration-thickness: 3px;
+    text-decoration-line: underline;
+    text-underline-offset: 0.18em;
   }
 }
 
-/* ---------------------------------------------------------------------------
-   The strike: an ink bar drawn through a manual task. It's a background on an
-   inline element, so it follows the text across wrapped lines. Default is
-   fully struck (reduced motion, no-JS). With motion allowed, the hero strikes
-   draw once on load in sequence (--i = line index): the only automatic
-   animation on the page, ~1.5s total.
-   --------------------------------------------------------------------------- */
-.strike {
-  background-image: linear-gradient(currentColor, currentColor);
-  background-repeat: no-repeat;
-  background-position: 0 60%;
-  background-size: 100% 0.07em;
-}
-
+/* Scroll reveal: blocks ease in as they enter the viewport. CSS scroll-driven
+   animations only (no JS); browsers without support, and reduced-motion
+   users, simply see the content. */
 @media (prefers-reduced-motion: no-preference) {
-  .strike-draw {
-    animation: strike-draw 320ms cubic-bezier(0.3, 0, 0.2, 1) both;
-    animation-delay: calc(200ms + var(--i, 0) * 260ms);
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
   }
 }
 
-@keyframes strike-draw {
-  from { background-size: 0% 0.07em; }
-  to   { background-size: 100% 0.07em; }
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

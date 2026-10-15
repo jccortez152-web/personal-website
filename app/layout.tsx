@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Archivo } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-// One family. Variable weight plus the width axis (62–125), which the
-// `condensed` / `expanded` utilities use.
-const archivo = Archivo({
+// Inter: the closest freely licensed match to Apple's SF Pro (which is only
+// licensed for Apple platforms). Variable weight.
+const inter = Inter({
   subsets: ["latin"],
-  axes: ["wdth"],
-  variable: "--font-archivo",
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -60,7 +59,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={archivo.variable}
+      className={inter.variable}
     >
       <body>{children}</body>
     </html>
